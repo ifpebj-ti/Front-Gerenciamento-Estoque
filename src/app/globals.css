@@ -1,10 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import "./../../public/assets/css/login.css";
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background-color: #f2f2f2;
+  --color-primary: #407bff;
+  --color-secondary: #263238;
+  --text-color-secondary: #9e9e9e;
+  --size-login-input: 25rem;
+}
+
+.bg-primary {
+  background-color: var(--background-color);
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+body {
+  background-color: var(--background-color);
+  font-family: "Open sans", sans-serif;
 }
 
 * {
@@ -19,4 +35,10 @@ li {
 
 a {
   text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --size-login-input: 20rem;
+  }
 }

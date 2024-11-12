@@ -1,3 +1,7 @@
 export default function Home() {
-  return <h1>ola</h1>;
+  return (
+    <>
+      <div>ola</div>
+    </>
+  );
 }
