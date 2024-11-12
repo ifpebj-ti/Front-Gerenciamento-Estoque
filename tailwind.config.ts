@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        backgroundLoginPoint: "1150px",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

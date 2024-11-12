@@ -1,0 +1,123 @@
+@media (min-width: 1150px) {
+  @keyframes animationTitleBackground {
+    0% {
+      position: absolute;
+      left: -200px;
+      top: 0;
+      opacity: 0;
+    }
+
+    90% {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 1;
+    }
+
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #titleBackground {
+    animation-name: animationTitleBackground;
+    animation-duration: 1s;
+
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animationSubtitleBackground {
+    0% {
+      position: absolute;
+      left: -200px;
+      top: 106px;
+      opacity: 0;
+    }
+
+    90% {
+      position: absolute;
+      left: 0;
+      top: 106px;
+      opacity: 1;
+    }
+
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #subtitleBackground {
+    opacity: 0;
+    animation-name: animationSubtitleBackground;
+    animation-duration: 1s;
+    animation-delay: 0.2s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animationImageBackground {
+    0% {
+      position: absolute;
+      left: -200px;
+      top: 181px;
+      opacity: 0;
+    }
+
+    90% {
+      position: absolute;
+      left: 70px;
+      top: 181px;
+      opacity: 1;
+    }
+
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #imageBackground {
+    opacity: 0;
+    animation-name: animationImageBackground;
+    animation-duration: 1s;
+    animation-delay: 0.4s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animationLoginForm {
+    0% {
+      opacity: 0;
+      position: absolute;
+      right: -200px;
+    }
+    90% {
+      right: 0px;
+      opacity: 1;
+    }
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #loginForm {
+    opacity: 0;
+    animation-name: animationLoginForm;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animationButtonChangeLogin {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(10px);
+    }
+  }
+
+  .animationButtonChangeLogin {
+    animation: animationButtonChangeLogin 0.6s infinite ease-in-out alternate;
+  }
+}
