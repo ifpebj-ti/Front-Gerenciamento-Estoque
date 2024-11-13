@@ -1,7 +1,9 @@
+import Header from "./_components/Header/Header";
+
 export default function Home() {
   return (
     <>
-      <div>ola</div>
+      <Header></Header>
     </>
   );
 }
