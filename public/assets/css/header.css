@@ -1,0 +1,29 @@
+@keyframes animationOpenMenu {
+  0% {
+    left: -500px;
+  }
+  100% {
+    left: 10px;
+  }
+}
+
+@keyframes animationCloseMenu {
+  0% {
+    left: 10px;
+  }
+  100% {
+    left: -500px;
+  }
+}
+@media (max-width: 640px) {
+  .animationOpenMenu {
+    animation-name: animationOpenMenu;
+    animation-fill-mode: forwards;
+    animation-duration: 0.5s;
+  }
+  .animationCloseMenu {
+    animation-name: animationCloseMenu;
+    animation-fill-mode: forwards;
+    animation-duration: 0.5s;
+  }
+}
