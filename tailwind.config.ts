@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
+        BannerHomePoint: "1450px",
         backgroundLoginPoint: "1150px",
       },
       colors: {
