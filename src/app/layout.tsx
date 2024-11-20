@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Madelar",
-  description: "Sistema de alguma de controle madelar",
+  title: "Gerenciador de estoque",
+  description: "Sistema gerenciador de estoque",
 };
 
 export default function RootLayout({
