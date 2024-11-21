@@ -58,7 +58,11 @@ const ProfileCard = ({ data }: Props) => {
       id="profile-card"
       className="flex rounded-full hover:rounded-b-none  sm:rounded-md bg-white p-2 sm:p-0 sm:w-48 sm:h-12 justify-center items-center gap-2 cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 relative"
     >
-      <Image src={iconAvatar} alt="foto do perfil"></Image>
+      <Image
+        className="object-cover bg-slate-400 rounded-full w-9 h-9] text-sm"
+        src={iconAvatar}
+        alt="foto"
+      ></Image>
       <span className="hidden sm:block text-[var(--color-primary)] font-extrabold first-letter:uppercase">
         {data.name.length >= 12 ? data.name.slice(0, 12) + "..." : data.name}
       </span>

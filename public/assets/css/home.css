@@ -1,0 +1,111 @@
+@media (min-width: 1450px) {
+  @keyframes animationTitleHomeBackground {
+    0% {
+      position: absolute;
+      left: -200px;
+      top: 16px;
+      opacity: 0;
+    }
+
+    90% {
+      position: absolute;
+      left: 0;
+      top: 16px;
+      opacity: 1;
+    }
+
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #titleHomeBackground {
+    animation-name: animationTitleHomeBackground;
+    animation-duration: 1s;
+
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animationSubtitleHomeBackground {
+    0% {
+      position: absolute;
+      left: -200px;
+      top: 161.5px;
+      opacity: 0;
+    }
+
+    90% {
+      position: absolute;
+      left: 0;
+      top: 161.5px;
+      opacity: 1;
+    }
+
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #subtitleHomeBackground {
+    opacity: 0;
+    animation-name: animationSubtitleHomeBackground;
+    animation-duration: 1s;
+    animation-delay: 0.2s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animationButtonHomeBackground {
+    0% {
+      position: absolute;
+      left: -200px;
+      top: 237.5px;
+      opacity: 0;
+    }
+
+    90% {
+      position: absolute;
+      left: 0px;
+      top: 237.5px;
+      opacity: 1;
+    }
+
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #buttonHomeBackground {
+    opacity: 0;
+    animation-name: animationButtonHomeBackground;
+    animation-duration: 1s;
+    animation-delay: 0.4s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animationImageHomeBackground {
+    0% {
+      opacity: 0;
+      position: absolute;
+      right: -50px;
+    }
+    90% {
+      right: 0px;
+      position: absolute;
+      opacity: 1;
+    }
+    100% {
+      position: relative;
+      opacity: 1;
+    }
+  }
+
+  #imageHomeBackground {
+    opacity: 0;
+    animation-name: animationImageHomeBackground;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+  }
+}

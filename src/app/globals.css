@@ -3,6 +3,7 @@
 @tailwind utilities;
 @import "./../../public/assets/css/login.css";
 @import "./../../public/assets/css/header.css";
+@import "./../../public/assets/css/home.css";
 :root {
   --background-color: #f2f2f2;
   --color-primary: #407bff;
@@ -40,6 +41,6 @@ a {
 
 @media (max-width: 640px) {
   :root {
-    --size-login-input: 20rem;
+    --size-login-input: 18rem;
   }
 }
