@@ -69,12 +69,18 @@ const Header = () => {
               </Link>
             </li>
             <li className="border-b-[1px] border-slate-700  inline-flex w-full ">
-              <Link className="uppercase  w-full text-center p-1" href={"/"}>
+              <Link
+                className="uppercase  w-full text-center p-1"
+                href={"/stock"}
+              >
                 Estoque
               </Link>
             </li>
             <li className=" inline-flex w-full ">
-              <Link className="uppercase  w-full text-center p-1" href={"/"}>
+              <Link
+                className="uppercase  w-full text-center p-1"
+                href={"/admin"}
+              >
                 Administração
               </Link>
             </li>
