@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import ButtonChangeLogin from "../ButtonChangeLogin/ButtonChangeLogin";
 import FormLogin from "../FormLogin/FormLogin";
 import FormRequestPasswordChange from "../FormRequestPasswordChange/FormRequestPasswordChange";
-import { headers } from "next/headers";
 import FormChangePass from "../FormChangePass/FormChangePass";
 
 type Props = {
