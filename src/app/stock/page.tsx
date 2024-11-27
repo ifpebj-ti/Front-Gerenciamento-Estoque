@@ -4,6 +4,7 @@ import Header from "../_components/Header/Header";
 import CardProduct from "../_components/Stock/CardProduct";
 import FilterProducts from "../_components/Stock/FilterProducts";
 import ViewProduct from "../_components/Stock/ViewProduct";
+import Pagination from "../_components/Stock/Pagination";
 
 type Product = {
   title: string;
@@ -129,6 +130,12 @@ const Stock = () => {
             }}
           ></CardProduct>
         </section>
+        <Pagination
+          sendCurrentPage={(page) => {
+            console.log(page);
+          }}
+          totalPages={50}
+        ></Pagination>
       </main>
     </>
   );
