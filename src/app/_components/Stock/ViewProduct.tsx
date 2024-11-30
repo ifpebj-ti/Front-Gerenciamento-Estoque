@@ -1,3 +1,5 @@
+import ViewValueProduct from "./ViewValueProduct";
+
 type Props = {
   close: () => void;
   data: {
@@ -35,32 +37,27 @@ const ViewProduct = ({ close, data }: Props) => {
             {data.title}
           </h1>
           <div className="flex sm:flex-row flex-col gap-4 sm:gap-8 ">
-            <div className="text-slate-400 flex flex-col gap-2 border-slate-200">
-              VALOR UNITÁRIO
-              <span className="text-slate-400 flex items-start">
-                R$
-                <strong className="text-2xl text-[var(--color-primary)]">
-                  {data.unit_price}
-                </strong>
-              </span>
-            </div>
-            <div className="text-slate-400 flex flex-col gap-2">
-              VALOR ESTOQUE
-              <span className="text-slate-400 flex items-start">
-                R$
-                <strong className="text-2xl text-[var(--color-primary)]">
-                  {data.stock_value}
-                </strong>
-              </span>
-            </div>
-            <div className="text-slate-400 flex flex-col gap-2">
-              QUANTIDADE
-              <span className="text-slate-400 flex items-start">
-                <strong className="text-2xl text-[var(--color-primary)]">
-                  {data.quantity}
-                </strong>
-              </span>
-            </div>
+            <ViewValueProduct
+              data={{
+                title: "Valor unitário",
+                price: data.unit_price,
+                isMoney: true,
+              }}
+            ></ViewValueProduct>
+            <ViewValueProduct
+              data={{
+                title: "Valor estoque",
+                price: data.stock_value,
+                isMoney: true,
+              }}
+            ></ViewValueProduct>
+            <ViewValueProduct
+              data={{
+                title: "Quantidade",
+                price: data.quantity,
+                isMoney: false,
+              }}
+            ></ViewValueProduct>
           </div>
         </div>
         <div className="border-[1px] rounded-lg border-slate-300 h-[90%] w-full flex flex-col p-4">
