@@ -33,7 +33,7 @@ const Stock = () => {
 
       <Header></Header>
 
-      <main className="relative max-w-[1100px]  w-80 sm:w-[500px] md:w-[700px] backgroundLoginPoint:w-[1100px]  mx-auto mt-8 mb-20">
+      <main className="relative max-w-[1100px] w-full px-8 sm:p-0 sm:w-[500px] md:w-[700px] backgroundLoginPoint:w-[1100px]  mx-auto mt-8 mb-20">
         {viewProductOpen ? (
           <ViewProduct
             data={{

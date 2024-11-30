@@ -1,4 +1,3 @@
-import Image from "next/image";
 type Props = {
   close: () => void;
   data: {
@@ -12,7 +11,7 @@ type Props = {
 };
 const ViewProduct = ({ close, data }: Props) => {
   return (
-    <div className="z-40 rounded-lg shadow-2xl flex flex-col  gap-4 absolute bg-white w-full  p-8">
+    <div className="z-40 rounded-lg shadow-2xl flex flex-col  gap-4 absolute left-0 bg-white w-full  p-8">
       <div
         onClick={() => {
           close();
