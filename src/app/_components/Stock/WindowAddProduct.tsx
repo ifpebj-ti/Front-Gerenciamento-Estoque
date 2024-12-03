@@ -17,13 +17,13 @@ const WindowAddProduct = ({ sendClose }: Props) => {
             e.preventDefault();
             sendClose();
           }}
-          className="border-2 border-red-500 uppercase text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-md flex-1 hover:scale-105 transition-all ease-in-out duration-200"
+          className="text-sm border-2 border-red-500 uppercase text-red-500 hover:bg-red-500 hover:text-white px-4 py-2 rounded-md flex-1 hover:scale-105 transition-all ease-in-out duration-200"
         >
           Cancelar
         </button>
         <button
           type="submit"
-          className="uppercase bg-[var(--color-primary)] text-white px-4 py-2 rounded-md flex-1 hover:scale-105 transition-all ease-in-out duration-200"
+          className="text-sm uppercase bg-[var(--color-primary)] text-white px-4 py-2 rounded-md flex-1 hover:scale-105 transition-all ease-in-out duration-200"
         >
           Salvar Produto
         </button>

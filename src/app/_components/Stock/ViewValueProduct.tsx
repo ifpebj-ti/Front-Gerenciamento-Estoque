@@ -1,3 +1,5 @@
+"use client";
+import formatMoney from "../../../utils/moneyFormat";
 type Props = {
   data: {
     title: string;
@@ -9,6 +11,7 @@ type Props = {
 };
 
 const ViewValueProduct = ({ data }: Props) => {
+  const valueFormatted = formatMoney(`${data.price}`);
   return (
     <div
       className={`${
@@ -25,7 +28,7 @@ const ViewValueProduct = ({ data }: Props) => {
             data.sizeText ? data.sizeText : "text-2xl"
           }  text-[var(--color-primary)]`}
         >
-          {data.price}
+          {data.isMoney ? valueFormatted.replace("R$", "") : data.price}
         </strong>
       </span>
     </div>

@@ -1,17 +1,21 @@
 "use client";
-import SchemaProduct from "@/app/_zod/SchemaProduct";
+import products from "@/app/_CONSTANTS/MockProducts";
+import SchemaProduct from "./../../../app/_zod/SchemaProduct";
 import formatMoney from "@/utils/moneyFormat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import ProductType from "@/types/productType";
 
 type FormData = z.infer<typeof SchemaProduct>;
 type Props = {
   children: React.ReactNode;
+  isEdit?: boolean;
+  idProduct?: number;
 };
-const FormProduct = ({ children }: Props) => {
+const FormProduct = ({ children, isEdit, idProduct }: Props) => {
   const {
     register,
     handleSubmit,
@@ -24,11 +28,22 @@ const FormProduct = ({ children }: Props) => {
       unit_price: "", // Garante um valor inicial como string
     },
   });
+  const [selectedProduct, setSelectedProduct] = useState<ProductType>({
+    id: 0,
+    title: "",
+    image: "",
+    unit_price: "",
+    stock_value: "",
+    quantity: 0,
+    categories: [],
+    criticalQuantityStock: 0,
+    description: "",
+  });
   const [priceState, setPriceState] = useState("");
   const [imageSelected, setImageSelected] = useState<File | null>(null);
   const price = watch("unit_price");
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    if (imageSelected === null) {
+    if (imageSelected === null && selectedProduct.image === "") {
       alert("Selecione uma imagem");
     }
     console.log(data, imageSelected);
@@ -53,6 +68,10 @@ const FormProduct = ({ children }: Props) => {
           alert("O tamanho da imagem deve ser menor que 5 mb");
           return null;
         }
+        setSelectedProduct({
+          ...selectedProduct,
+          image: URL.createObjectURL(file),
+        });
         setImageSelected(file);
         URL.createObjectURL(file);
       }
@@ -70,6 +89,29 @@ const FormProduct = ({ children }: Props) => {
       priceElement.style.color = "rgb(148 163 184 / var(--tw-text-opacity))";
     }
   }, [price, setValue]);
+
+  useEffect(() => {
+    (function () {
+      if (isEdit) {
+        // Requisição do produto
+        const product = products.find((product) => product.id === idProduct);
+
+        setValue("title", product?.title as string);
+        setValue("unit_price", product?.unit_price as string);
+        setValue(
+          "criticalQuantityStock",
+          `${product?.criticalQuantityStock as number}`
+        );
+        setValue("quantity", `${product?.quantity as number}`);
+        setValue("description", product?.description as string);
+        setSelectedProduct(product as ProductType);
+        // const image = document.querySelector(
+        //   "#imagePreview"
+        // ) as HTMLImageElement;
+        // image.src = product?.image as string;
+      }
+    })();
+  }, [isEdit, idProduct, setValue]);
 
   return (
     <>
@@ -165,10 +207,14 @@ const FormProduct = ({ children }: Props) => {
               <span className="text-sm text-blue-500">
                 As imagens devem ser JPG ou PNG e não devem ultrapassar 5 mb.
               </span>
-              {imageSelected && (
+              {imageSelected !== null || isEdit ? (
                 <div className="flex flex-col gap-2">
                   <Image
-                    src={URL.createObjectURL(imageSelected)}
+                    src={`${
+                      selectedProduct
+                        ? selectedProduct.image
+                        : URL.createObjectURL(imageSelected as File)
+                    }`}
                     alt="Imagem selecionada"
                     id="imagePreview"
                     width={160}
@@ -180,18 +226,22 @@ const FormProduct = ({ children }: Props) => {
                     onClick={(e) => {
                       e.preventDefault();
                       setImageSelected(null);
+                      setSelectedProduct({ ...selectedProduct, image: "" });
                     }}
                     className="hover:scale-105 transition-all ease-in-out duration-200 bg-red-500 text-white px-4 py-1 rounded-md w-40 text-sm"
                   >
                     Remover Imagem
                   </button>
                 </div>
-              )}
+              ) : null}
             </div>
-
-            <span className="text-sm text-red-500">
-              {imageSelected === null ? "Selecione uma imagem" : ""}
-            </span>
+            {selectedProduct?.image.length > 0 ? (
+              <></>
+            ) : (
+              <span className="text-sm text-red-500">
+                {imageSelected === null ? "Selecione uma imagem" : ""}
+              </span>
+            )}
           </div>
         </div>
         <div

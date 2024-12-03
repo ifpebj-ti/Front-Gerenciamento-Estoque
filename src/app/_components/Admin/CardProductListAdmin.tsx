@@ -1,16 +1,11 @@
+import ProductType from "@/types/productType";
 import ViewValueProduct from "../Stock/ViewValueProduct";
 
 type Props = {
-  data: {
-    title: string;
-    image: string;
-    unit_price: string;
-    stock_value: string;
-    quantity: number;
-    categories: string[];
-  };
+  data: ProductType;
+  sendOpenEditWindow: () => void;
 };
-const CardProductListAdmin = ({ data }: Props) => {
+const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
   return (
     <div className="max-w-[1100px] w-full  sm:p-0 sm:w-[500px] lg:w-full   bg-white  rounded-lg flex flex-col lg:flex-row shadow-lg  justify-between items-center">
       <div
@@ -23,7 +18,7 @@ const CardProductListAdmin = ({ data }: Props) => {
         className="w-full h-64 md:h-96 rounded-t-lg lg:rounded-t-none lg:w-52 lg:h-40 lg:rounded-l-lg border-b-[1px] lg:border-b-0 lg:border-r-[1px] border-slate-200"
       ></div>
 
-      <div className="flex flex-col px-4 md:px-0 gap-6 lg:gap-2 mt-8 lg:mt-0 lg:ml-4 ">
+      <div className="flex flex-col px-4 md:px-0 gap-6 lg:gap-2 mt-8 lg:mt-0 lg:ml-4 flex-1">
         <h1 className="text-sm font-bold uppercase text-center lg:text-start">
           {data.title}
         </h1>
@@ -70,7 +65,10 @@ const CardProductListAdmin = ({ data }: Props) => {
         </span>
       </div>
       <div className="flex flex-row my-11 lg:my-0 lg:flex-col gap-2 mx-8">
-        <button className="text-sm sm:text-md hover:scale-110 hover:bg-slate-400 hover:text-white transition-all ease-in-out duration-200 uppercase text-slate-400 border-slate-400 border-2 px-8 backgroundLoginPoint:px-16 py-1 rounded-lg">
+        <button
+          onClick={() => sendOpenEditWindow()}
+          className="text-sm sm:text-md hover:scale-110 hover:bg-slate-400 hover:text-white transition-all ease-in-out duration-200 uppercase text-slate-400 border-slate-400 border-2 px-8 backgroundLoginPoint:px-16 py-1 rounded-lg"
+        >
           editar
         </button>
         <button className="text-sm sm:text-md hover:scale-110 hover:bg-red-700 hover:text-white transition-all ease-in-out duration-200 uppercase text-red-700 border-red-700 border-2 px-8 backgroundLoginPoint:px-16 py-1 rounded-lg">
