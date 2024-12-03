@@ -56,7 +56,7 @@ const ProfileCard = ({ data }: Props) => {
         }
       }}
       id="profile-card"
-      className="flex rounded-full hover:rounded-b-none  sm:rounded-md bg-white p-2 sm:p-0 sm:w-48 sm:h-12 justify-center items-center gap-2 cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 relative"
+      className="z-20 flex rounded-full hover:rounded-b-none  sm:rounded-md bg-white p-2 sm:p-0 sm:w-48 sm:h-12 justify-center items-center gap-2 cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 relative"
     >
       <Image
         className="object-cover bg-slate-400 rounded-full w-9 h-9] text-sm"
@@ -86,7 +86,7 @@ const ProfileCard = ({ data }: Props) => {
           <li className="w-full inline-flex">
             <Link
               className=" p-2  w-full hover:scale-105 transition-all ease-in-out duration-200 hover:font-bold"
-              href="/config"
+              href="/profile"
             >
               Configurações da conta
             </Link>

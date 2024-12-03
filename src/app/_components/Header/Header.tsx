@@ -60,7 +60,7 @@ const Header = () => {
         </div>
         <div
           id="options-menu"
-          className="rounded-md transition-all ease-in-out duration-200 bg-white top-14 shadow-md absolute -left-[500px]  p-2"
+          className="z-20 rounded-md transition-all ease-in-out duration-200 bg-white top-14 shadow-md absolute -left-[500px]  p-2"
         >
           <ul className="flex flex-col  gap-1 text-sm">
             <li className="border-b-[1px] border-slate-700 inline-flex w-full ">
@@ -88,7 +88,7 @@ const Header = () => {
         </div>
       </div>
       <nav>
-        <ul className="hidden sm:flex gap-2">
+        <ul className=" hidden sm:flex gap-2">
           <li>
             <Link
               className={`${
