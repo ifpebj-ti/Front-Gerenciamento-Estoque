@@ -2,8 +2,9 @@
 type Props = {
   sendName: (name: string) => void;
   sendCategory: (category: string) => void;
+  isUser?: boolean;
 };
-const FilterProducts = ({ sendName, sendCategory }: Props) => {
+const FilterProducts = ({ sendName, sendCategory, isUser }: Props) => {
   return (
     <form className=" flex flex-col md:flex-row sm:w-[500px] md:w-[700px] gap-5 shadow-lg rounded-lg bg-white backgroundLoginPoint:w-full py-4 px-8 justify-between items-center">
       <label className="border-b-2 border-slate-300 bg-transparent w-full inline-flex justify-between">
@@ -15,7 +16,7 @@ const FilterProducts = ({ sendName, sendCategory }: Props) => {
           type="text"
           name=""
           id=""
-          placeholder="Nome do produto"
+          placeholder={isUser ? "Nome do usuário" : "Nome do produto"}
         />
         <svg
           width="21"
@@ -32,26 +33,31 @@ const FilterProducts = ({ sendName, sendCategory }: Props) => {
           />
         </svg>
       </label>
-
-      <select
-        onChange={(e) => {
-          sendCategory(e.target.value);
-        }}
-        className="bg-transparent border-b-2 text-slate-400 w-full py-1 focus:outline-none focus:font-bold"
-        name=""
-        id=""
-      >
-        <option value="default" selected disabled>
-          Selecione uma categoria
-        </option>
-        <option value="1">Qualquer coisa</option>
-      </select>
-      <button
-        className="font-extrabold text-nowrap uppercase px-9 py-1 text-slate-400 border-[1px] border-slate-300 rounded-md hover:scale-105 transition-all duration-200 hover:text-black hover:border-black md:w-[500px]"
-        type="reset"
-      >
-        Limpar filtro
-      </button>
+      {isUser ? (
+        <></>
+      ) : (
+        <>
+          <select
+            onChange={(e) => {
+              sendCategory(e.target.value);
+            }}
+            className="bg-transparent border-b-2 text-slate-400 w-full py-1 focus:outline-none focus:font-bold"
+            name=""
+            id=""
+          >
+            <option value="default" selected disabled>
+              Selecione uma categoria
+            </option>
+            <option value="1">Qualquer coisa</option>
+          </select>
+          <button
+            className="font-extrabold text-nowrap uppercase px-9 py-1 text-slate-400 border-[1px] border-slate-300 rounded-md hover:scale-105 transition-all duration-200 hover:text-black hover:border-black md:w-[500px]"
+            type="reset"
+          >
+            Limpar filtro
+          </button>
+        </>
+      )}
     </form>
   );
 };

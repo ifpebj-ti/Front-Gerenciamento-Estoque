@@ -1,2 +1,2 @@
-const OPTIONS = ["Produtos", "Categorias", "Usuários"];
+const OPTIONS = ["Produtos", "Usuários"];
 export default OPTIONS;

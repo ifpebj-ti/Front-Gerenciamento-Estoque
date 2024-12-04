@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardProductListAdmin from "../_components/Admin/CardProductListAdmin";
 import SelectSession from "../_components/Admin/SelectSession";
 import Header from "../_components/Header/Header";
@@ -9,12 +9,15 @@ import OPTIONS from "../_CONSTANTS/OptionsSession";
 import WindowAddProduct from "../_components/Stock/WindowAddProduct";
 import WindowEditProduct from "../_components/Stock/WindowEditProduct";
 import products from "../_CONSTANTS/MockProducts";
+import CardUserListAdmin from "../_components/Admin/CardUserListAdmin";
+import { MockUsers } from "../_CONSTANTS/MockUsers";
 
 const Admin = () => {
   const [currentSession, setCurrentSession] = useState(0);
   const [showWindowAddProduct, setShowWindowAddProduct] = useState(false);
   const [showWindowEditProduct, setShowWindowEditProduct] = useState(false);
   const [productSelectToEdit, setProdutSelectToEdit] = useState(0);
+
   const renderSession = () => {
     switch (currentSession) {
       case 0:
@@ -24,7 +27,7 @@ const Admin = () => {
               onClick={() => {
                 setShowWindowAddProduct(!showWindowAddProduct);
               }}
-              className="transition-all ease-in-out duration-200 shadow-lg hover:scale-105 w-full h-20 bg-[var(--color-primary)] rounded-lg text-white hover:border-2 hover:border-white hover:border-dashed uppercase hover:opacity-70
+              className="transition-all ease-in-out duration-200 shadow-lg hover:bg-[var(--color-primary)] hover:text-white hover:border-none w-full h-12 text-slate-400 rounded-lg  border-2 border-slate-400  uppercase 
           "
             >
               Adicionar Produto
@@ -43,6 +46,41 @@ const Admin = () => {
                 ></CardProductListAdmin>
               );
             })}
+            <Pagination
+              sendCurrentPage={(page: number) => {
+                console.log(page);
+              }}
+              totalPages={10}
+            ></Pagination>
+          </>
+        );
+      case 1:
+        return (
+          <>
+            <button
+              onClick={() => {
+                // setShowWindowAddProduct(!showWindowAddProduct);
+              }}
+              className="transition-all ease-in-out duration-200 shadow-lg hover:bg-[var(--color-primary)] hover:text-white hover:border-none w-full h-12 text-slate-400 rounded-lg  border-2 border-slate-400  uppercase 
+          "
+            >
+              Adicionar Usuário
+            </button>
+            {MockUsers.map((user) => {
+              return (
+                <CardUserListAdmin
+                  data={user}
+                  key={user.id}
+                  sendOpenEditWindow={() => {}}
+                ></CardUserListAdmin>
+              );
+            })}
+            <Pagination
+              sendCurrentPage={(page: number) => {
+                console.log(page);
+              }}
+              totalPages={10}
+            ></Pagination>
           </>
         );
 
@@ -86,6 +124,7 @@ const Admin = () => {
           options={OPTIONS}
         ></SelectSession>
         <FilterProducts
+          isUser={currentSession === 1 ? true : false}
           sendCategory={(category: string) => {
             console.log(category);
           }}
@@ -96,16 +135,6 @@ const Admin = () => {
         <section className="flex flex-col gap-2 mt-4 relative">
           {renderSession()}
         </section>
-        {currentSession === 0 ? (
-          <>
-            <Pagination
-              sendCurrentPage={(page: number) => {
-                console.log(page);
-              }}
-              totalPages={10}
-            ></Pagination>
-          </>
-        ) : null}
       </main>
     </>
   );
