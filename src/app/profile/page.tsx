@@ -1,26 +1,32 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../_components/Header/Header";
 import FormAlterData from "../_components/Profile/FormAlterData";
 import FormAlterPass from "../_components/Profile/FormAlterPass";
+import { UserType } from "@/types/userType";
 
 const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [alterSession, setAlterSession] = useState(0);
-  const [infoUser, setInfoUser] = useState({
-    name: "João Almeida e Silva",
-    email: "joao@example.com",
-  });
+  const [infoUser, setInfoUser] = useState<UserType>();
+
+  useEffect(() => {
+    (() => {
+      setInfoUser({
+        id: 1,
+        avatar:
+          "https://images-americanas.b2w.io/produtos/3312202621/imagens/boneco-eufrazino-looney-tunes-10cm-nj-croce/3312202621_1_xlarge.jpg",
+        name: "João Almeida e Silva",
+        email: "joao@example.com",
+      });
+    })();
+  }, []);
 
   const renderSession = () => {
     switch (alterSession) {
       case 0:
         return (
-          <FormAlterData
-            data={infoUser}
-            imageProfile="https://images-americanas.b2w.io/produtos/3312202621/imagens/boneco-eufrazino-looney-tunes-10cm-nj-croce/3312202621_1_xlarge.jpg"
-            isEditMode={isEditMode}
-          >
+          <FormAlterData data={infoUser as UserType} isEditMode={isEditMode}>
             <button
               onClick={() => {
                 setIsEditMode(!isEditMode);
@@ -49,7 +55,7 @@ const Profile = () => {
       case 1:
         return (
           <FormAlterPass
-            imageProfile="https://images-americanas.b2w.io/produtos/3312202621/imagens/boneco-eufrazino-looney-tunes-10cm-nj-croce/3312202621_1_xlarge.jpg"
+            imageProfile={infoUser?.avatar as string}
             isEditMode={isEditMode}
           >
             <button
