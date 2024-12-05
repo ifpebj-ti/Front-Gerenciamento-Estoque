@@ -6,17 +6,14 @@ import {
   SchemaFormAlterData,
 } from "@/app/_zod/SchemaFormAlterData";
 import React, { useEffect } from "react";
+import { UserType } from "@/types/userType";
 
 type Props = {
   children: React.ReactNode;
   isEditMode: boolean;
-  imageProfile: string;
-  data: {
-    name: string;
-    email: string;
-  };
+  data: UserType;
 };
-const FormAlterData = ({ children, isEditMode, imageProfile, data }: Props) => {
+const FormAlterData = ({ children, isEditMode, data }: Props) => {
   const {
     register,
     handleSubmit,
@@ -35,9 +32,9 @@ const FormAlterData = ({ children, isEditMode, imageProfile, data }: Props) => {
     // Lógica para envio do formulário
   };
   useEffect(() => {
-    setValue("name", data.name);
-    setValue("email", data.email);
-  }, [setValue, data.name, data.email]);
+    setValue("name", data?.name);
+    setValue("email", data?.email);
+  }, [setValue, data?.name, data?.email]);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -45,13 +42,13 @@ const FormAlterData = ({ children, isEditMode, imageProfile, data }: Props) => {
     >
       <div
         style={{
-          backgroundImage: `url(${imageProfile})`,
+          backgroundImage: `url(${data?.avatar})`,
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
         className="border-2 boder-slate-200 w-[16rem] h-[16rem] rounded-full bg-slate-300 flex justify-center items-center "
       >
-        {!imageProfile && <div className="font-bold">Sem imagem ):</div>}
+        {!data?.avatar && <div className="font-bold">Sem imagem ):</div>}
       </div>
       <div className="flex flex-col justify-evenly h-56">
         <div className="flex flex-col gap-4">

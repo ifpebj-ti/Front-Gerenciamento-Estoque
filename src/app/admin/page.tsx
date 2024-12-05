@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CardProductListAdmin from "../_components/Admin/CardProductListAdmin";
 import SelectSession from "../_components/Admin/SelectSession";
 import Header from "../_components/Header/Header";
