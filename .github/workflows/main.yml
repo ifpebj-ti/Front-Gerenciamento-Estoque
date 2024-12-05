@@ -1,0 +1,54 @@
+name: Deploy Application Front
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 'lts/*'
+
+    - name: Install dependencies and build
+      run: |
+        npm install
+        npm run build
+
+    - name: Login Docker
+      run: docker login -u brazf -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build Docker image
+      run: |
+        docker build \
+        --build-arg REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} \
+        -t brazf/estoque-frontend .
+
+    - name: Push Docker image
+      run: docker push brazf/estoque-frontend
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+
+    - name: Pull Docker image
+      run: docker pull brazf/estoque-frontend:latest
+
+    - name: Remove existing container
+      run: |
+        docker rm -f deploy_frontend || true
+
+    - name: Run Docker container
+      run: |
+        docker run -d --restart unless-stopped \
+          -p 443:80 \
+          --name deploy_frontend brazf/estoque-frontend
