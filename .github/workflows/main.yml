@@ -44,5 +44,7 @@ jobs:
       run: |
         docker run -d --restart unless-stopped \
           -p 443:3000 \
-          --env-file /path/to/env/file \
+          -e NEXT_PUBLIC_API_URL=https://api.example.com \
+          -e NODE_ENV=production \
           --name deploy_frontend brazf/estoque-frontend
+    
