@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import ProductType from "@/types/productType";
+import WindowAddNewCategory from "./WindowAddNewCategory";
 
 type FormData = z.infer<typeof SchemaProduct>;
 type Props = {
@@ -41,6 +42,7 @@ const FormProduct = ({ children, isEdit, idProduct }: Props) => {
   });
   const [priceState, setPriceState] = useState("");
   const [imageSelected, setImageSelected] = useState<File | null>(null);
+  const [showWindowNewCategory, setShowWindowNewCategory] = useState(false);
   const price = watch("unit_price");
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (imageSelected === null && selectedProduct.image === "") {
@@ -115,6 +117,16 @@ const FormProduct = ({ children, isEdit, idProduct }: Props) => {
 
   return (
     <>
+      {showWindowNewCategory && (
+        <div className="w-full h-full flex justify-center items-center fixed bg-black/50 z-40 top-0 right-0">
+          <WindowAddNewCategory
+            sendClose={() => {
+              setShowWindowNewCategory(!showWindowNewCategory);
+            }}
+          ></WindowAddNewCategory>
+        </div>
+      )}
+
       <form
         className="grid grid-cols-1 md:grid-cols-2 gap-11  mt-8"
         onSubmit={handleSubmit(onSubmit)}
@@ -143,6 +155,17 @@ const FormProduct = ({ children, isEdit, idProduct }: Props) => {
             <span className="text-sm text-red-500">
               {errors.categories?.message}
             </span>
+          </div>
+          <div className="flex justify-center items-center">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setShowWindowNewCategory(!showWindowNewCategory);
+              }}
+              className="text-nowrap uppercase bg-[var(--color-primary)] text-white px-4 py-2 rounded-md flex-1 hover:scale-105 transition-all ease-in-out duration-200"
+            >
+              Adicionar nova categoria
+            </button>
           </div>
           <div className="flex flex-col  gap-2  relative">
             <div
