@@ -4,8 +4,6 @@ import Header from "../_components/Header/Header";
 import FormAlterData from "../_components/Profile/FormAlterData";
 import FormAlterPass from "../_components/Profile/FormAlterPass";
 import { UserType } from "@/types/userType";
-import WindowConfirm from "../_components/WindowConfirm/WindowConfirm";
-import WindowLoad from "../_components/WindowLoad/WindowLoad";
 
 const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -90,12 +88,12 @@ const Profile = () => {
   return (
     <>
       {/* <WindowLoad></WindowLoad> */}
-      <WindowConfirm
+      {/* <WindowConfirm
         title="Você deseja exluir esse usuario?"
         message="Ao excluir esse usuario todos os seus dados serao perdidos"
         sendClose={() => {}}
         confirm={() => {}}
-      ></WindowConfirm>
+      ></WindowConfirm> */}
       <Header></Header>
       <main className="shadow-lg max-w-[1100px] gap-8  w-full  px-8 py-16 flex flex-col justify-center items-center md:items-start mx-auto mt-8 mb-20 bg-white rounded-lg">
         <h1 className="uppercase text-2xl font-bold">
