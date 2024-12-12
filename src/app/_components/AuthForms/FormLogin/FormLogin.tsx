@@ -1,11 +1,12 @@
 "use client";
-
+import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import SchemaLoginForm from "../../../_zod/SchemaLoginForm";
 import { z } from "zod";
 import { ReactNode } from "react";
 import Title from "../Title/Title";
+import { useRouter } from "next/navigation";
 
 // Cria um tipo específico para o formulário usando o SchemaLoginForm
 type FormData = z.infer<typeof SchemaLoginForm>;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 const FormLogin = ({ children }: Props) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -24,9 +26,20 @@ const FormLogin = ({ children }: Props) => {
   });
 
   // Define `onSubmit` com o tipo `SubmitHandler<FormData>`
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    // Lógica para envio do formulário
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const email = data.email;
+    const password = data.password;
+    const result = await signIn("credentials", {
+      username: email,
+      password: password,
+      redirect: false,
+    });
+    if (result?.error) {
+      alert(result.error);
+    }
+    if (result?.ok) {
+      router.push("/");
+    }
   };
 
   return (
