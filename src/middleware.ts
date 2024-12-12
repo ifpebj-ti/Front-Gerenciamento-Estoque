@@ -1,41 +1,55 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import { verifyToken } from "./API/verifyToken";
+import { UserInfoType } from "./types/userType";
 
 export default withAuth(
   async function middleware(req) {
-    // Obtenha o token do NextAuth
     const token = req.nextauth.token;
 
     // Se o token não existir, redirecione para a página de login
-    if (!token) {
+    if (!token || !token.accessToken) {
       const url = req.nextUrl.clone();
       url.pathname = "/login";
       return NextResponse.redirect(url);
     }
 
-    // Verificando o token
+    // Verifique o token na API
     const verify = await verifyToken({ token: token.accessToken as string });
 
-    // Caso o token não seja válido, redirecione para a página de login
+    // Caso o token seja inválido ou expirado, redirecione para login
     if (!verify || verify.status !== 200) {
       const url = req.nextUrl.clone();
       url.pathname = "/login";
       return NextResponse.redirect(url);
     }
 
-    // Permita o acesso se o token for válido
+    // Use o userInfo armazenado no token
+    const userInfo: UserInfoType = token.userInfo as UserInfoType;
+
+    // Verifique se a rota atual é `/admin` e a role do usuário
+    if (req.nextUrl.pathname.startsWith("/admin") && userInfo) {
+      const isAdmin = userInfo.roles.some(
+        (role) => role.authority === "ROLE_ADMIN"
+      );
+
+      if (!isAdmin) {
+        const url = req.nextUrl.clone();
+        url.pathname = "/unauthorized"; // Página de erro de acesso negado
+        return NextResponse.redirect(url);
+      }
+    }
+
     return NextResponse.next();
   },
   {
-    // Configurações de rotas protegidas
     pages: {
-      signIn: "/login", // Página de login
+      signIn: "/login",
+      signOut: "/login",
     },
   }
 );
 
-// Configura quais rotas o middleware deve proteger
 export const config = {
   matcher: ["/", "/stock", "/admin", "/profile", "/logout"], // Rotas protegidas
 };

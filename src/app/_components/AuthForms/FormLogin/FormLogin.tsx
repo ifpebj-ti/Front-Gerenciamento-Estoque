@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import SchemaLoginForm from "../../../_zod/SchemaLoginForm";
 import { z } from "zod";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Title from "../Title/Title";
 import { useRouter } from "next/navigation";
-
+import { useSession } from "next-auth/react";
 // Cria um tipo específico para o formulário usando o SchemaLoginForm
 type FormData = z.infer<typeof SchemaLoginForm>;
 
@@ -16,6 +16,8 @@ type Props = {
 };
 
 const FormLogin = ({ children }: Props) => {
+  const { data: session } = useSession();
+
   const router = useRouter();
   const {
     register,
@@ -41,6 +43,12 @@ const FormLogin = ({ children }: Props) => {
       router.push("/");
     }
   };
+
+  useEffect(() => {
+    if (session) {
+      router.push("/");
+    }
+  }, [router, session]);
 
   return (
     <>

@@ -1,6 +1,7 @@
+import { verifyToken } from "@/API/verifyToken";
+import { UserInfoType } from "@/types/userType";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { cookies } from "next/headers";
 
 interface User {
   id: string;
@@ -16,7 +17,20 @@ interface User {
   id: string;
   token: string;
   username: string;
+  email: string;
+  status: boolean;
+  roles: { id: string; authority: string }[];
 }
+
+interface UserInfo {
+  id: number;
+  name: string;
+  email: string;
+  status: boolean;
+  roles: { id: string; authority: string }[];
+}
+
+let userInfo: UserInfo;
 
 const handler = NextAuth({
   pages: {
@@ -65,14 +79,18 @@ const handler = NextAuth({
 
           const data = await response.json();
 
-          // Salva o token JWT em cookies
-          cookies().set("jwt", data.access_token);
-
+          const requestVerify = await verifyToken({ token: data.access_token });
+          if (requestVerify) {
+            userInfo = requestVerify.data;
+          }
           // Retorna o usuário com o token
           return {
-            id: "unique-user-id", // Substitua por um ID real, se disponível
+            id: `${userInfo.id}`, // Substitua por um ID real, se disponível
             token: data.access_token,
-            username: credentials.username,
+            username: userInfo.name,
+            email: userInfo.email,
+            status: userInfo.status,
+            roles: userInfo.roles,
           };
         } catch (e) {
           console.error("Erro na autenticação:", e);
@@ -83,17 +101,18 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // Salva o token JWT no callback do JWT
       if (user) {
-        token.accessToken = (user as User).token;
-        token.username = (user as User).username; // Opcional: salvar o nome de usuário
+        const customUser = user as User;
+        token.accessToken = customUser.token;
+        token.username = customUser.username;
+        token.id = customUser.id;
+        token.userInfo = userInfo; // Inclua o objeto `userInfo` completo
       }
       return token;
     },
     async session({ session, token }) {
-      // Adiciona o token à sessão
       session.accessToken = token.accessToken as string;
-      //   session.username = token.username as string; // Opcional: incluir o nome de usuário
+      session.userInfo = token.userInfo as UserInfoType; // Inclua o userInfo na sessão
       return session;
     },
   },

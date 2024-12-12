@@ -4,3 +4,11 @@ export type UserType = {
   name: string;
   email: string;
 };
+
+export interface UserInfoType {
+  id: number;
+  name: string;
+  email: string;
+  status: boolean;
+  roles: { id: string; authority: string }[];
+}
