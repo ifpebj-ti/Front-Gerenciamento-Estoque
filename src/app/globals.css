@@ -4,6 +4,7 @@
 @import "./../../public/assets/css/login.css";
 @import "./../../public/assets/css/header.css";
 @import "./../../public/assets/css/home.css";
+@import "./../../public/assets/css/windowErrorLogin.css";
 :root {
   --background-color: #f2f2f2;
   --color-primary: #407bff;

@@ -13,11 +13,12 @@ type FormData = z.infer<typeof SchemaLoginForm>;
 
 type Props = {
   children: ReactNode;
+  sendErrorPassOrEmail: () => void;
+  sendLoading: () => void;
 };
 
-const FormLogin = ({ children }: Props) => {
+const FormLogin = ({ children, sendErrorPassOrEmail, sendLoading }: Props) => {
   const { data: session } = useSession();
-
   const router = useRouter();
   const {
     register,
@@ -29,6 +30,7 @@ const FormLogin = ({ children }: Props) => {
 
   // Define `onSubmit` com o tipo `SubmitHandler<FormData>`
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    sendLoading();
     const email = data.email;
     const password = data.password;
     const result = await signIn("credentials", {
@@ -37,7 +39,7 @@ const FormLogin = ({ children }: Props) => {
       redirect: false,
     });
     if (result?.error) {
-      alert(result.error);
+      sendErrorPassOrEmail();
     }
     if (result?.ok) {
       router.push("/");
