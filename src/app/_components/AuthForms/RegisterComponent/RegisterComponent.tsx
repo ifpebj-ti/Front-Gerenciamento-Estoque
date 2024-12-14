@@ -7,6 +7,7 @@ import FormLogin from "../FormLogin/FormLogin";
 import FormRequestPasswordChange from "../FormRequestPasswordChange/FormRequestPasswordChange";
 import FormChangePass from "../FormChangePass/FormChangePass";
 import WindowIncorrectlyPass from "../FormLogin/WindowIncorrectlyPass";
+import WindowLoad from "../../WindowLoad/WindowLoad";
 
 type Props = {
   route: string;
@@ -15,6 +16,7 @@ const RegisterComponent = ({ route }: Props) => {
   const [errorPassOrEmail, setErrorPassOrEmail] = useState<boolean>(false);
   /* eslint-disable */
   const [count, setCount] = useState(5);
+  const [isLoading, setIsLoading] = useState(false);
   const [isReplace, setIsReplace] = useState<boolean>(() => {
     switch (route) {
       case "login":
@@ -38,6 +40,7 @@ const RegisterComponent = ({ route }: Props) => {
 
   const handleSendErrorPassOrEmail = () => {
     setErrorPassOrEmail(true);
+    setIsLoading(false);
     setCount(5);
     // Inicia o timer para decrementar
     const timer = setInterval(() => {
@@ -58,7 +61,9 @@ const RegisterComponent = ({ route }: Props) => {
         return (
           <>
             <FormLogin
-              sendLoading={() => {}}
+              sendLoading={() => {
+                setIsLoading(true);
+              }}
               sendErrorPassOrEmail={handleSendErrorPassOrEmail}
             >
               <ButtonLogin
@@ -121,6 +126,7 @@ const RegisterComponent = ({ route }: Props) => {
 
   return (
     <>
+      {isLoading && <WindowLoad />}
       {errorPassOrEmail && <WindowIncorrectlyPass />}
       <main className="flex justify-center items-center w-full">
         <section
