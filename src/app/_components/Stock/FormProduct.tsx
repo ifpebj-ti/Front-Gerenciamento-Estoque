@@ -1,5 +1,4 @@
 "use client";
-import products from "@/app/_CONSTANTS/MockProducts";
 import SchemaProduct from "./../../../app/_zod/SchemaProduct";
 import formatMoney from "@/utils/moneyFormat";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -70,7 +69,8 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
       alert("Selecione uma imagem");
     }
     //console.log(data, imageSelected);
-
+    // Disable when using a mutation
+    console.log(idProduct);
     const sendData: {
       token: string;
       data: AddProductType;
@@ -134,28 +134,30 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
     }
   }, [price, setValue]);
 
-  useEffect(() => {
-    (function () {
-      if (isEdit) {
-        // Requisição do produto
-        const product = products.find((product) => product.id === idProduct);
+  // Criar requisição para obter o produto
 
-        setValue("title", product?.title as string);
-        setValue("unit_price", product?.unit_price as string);
-        setValue(
-          "criticalQuantityStock",
-          `${product?.criticalQuantityStock as number}`
-        );
-        setValue("quantity", `${product?.quantity as number}`);
-        setValue("description", product?.description as string);
-        setSelectedProduct(product as ProductType);
-        // const image = document.querySelector(
-        //   "#imagePreview"
-        // ) as HTMLImageElement;
-        // image.src = product?.image as string;
-      }
-    })();
-  }, [isEdit, idProduct, setValue]);
+  // useEffect(() => {
+  //   (function () {
+  //     if (isEdit) {
+  //       // Requisição do produto
+  //       const product = products.find((product) => product.id === idProduct);
+
+  //       setValue("title", product?.title as string);
+  //       setValue("unit_price", product?.unit_price as string);
+  //       setValue(
+  //         "criticalQuantityStock",
+  //         `${product?.criticalQuantityStock as number}`
+  //       );
+  //       setValue("quantity", `${product?.quantity as number}`);
+  //       setValue("description", product?.description as string);
+  //       setSelectedProduct(product as ProductType);
+  //       // const image = document.querySelector(
+  //       //   "#imagePreview"
+  //       // ) as HTMLImageElement;
+  //       // image.src = product?.image as string;
+  //     }
+  //   })();
+  // }, [isEdit, idProduct, setValue]);
 
   return (
     <>

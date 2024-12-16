@@ -13,7 +13,7 @@ const WindowEditProduct = ({ sendClose, id }: Props) => {
         <h1 className="uppercase font-bold text-lg sm:text-2xl mb-4">
           Dados do produto - Edição
         </h1>
-        <FormProduct isEdit={true} idProduct={id}>
+        <FormProduct sendClose={sendClose} isEdit={true} idProduct={id}>
           <button
             onClick={(e) => {
               e.preventDefault();

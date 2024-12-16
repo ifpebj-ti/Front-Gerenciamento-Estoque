@@ -1,8 +1,8 @@
-import ProductType from "@/types/productType";
+import { Product } from "@/types/productType";
 import ViewValueProduct from "../Stock/ViewValueProduct";
 
 type Props = {
-  data: ProductType;
+  data: Product;
   sendOpenEditWindow: () => void;
 };
 const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
@@ -10,7 +10,11 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
     <div className="max-w-[1100px] w-full  sm:p-0 sm:w-[500px] lg:w-full   bg-white  rounded-lg flex flex-col lg:flex-row shadow-lg  justify-between items-center">
       <div
         style={{
-          backgroundImage: `url(${data.image})`,
+          backgroundImage: `url(${
+            data.photo
+              ? URL.createObjectURL(data.photo)
+              : "https://placehold.co/600x400"
+          })`,
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -20,13 +24,13 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
 
       <div className="flex flex-col px-4 md:px-0 gap-6 lg:gap-2 mt-8 lg:mt-0 lg:ml-4 flex-1">
         <h1 className="text-sm font-bold uppercase text-center lg:text-start">
-          {data.title}
+          {data.name}
         </h1>
         <span className="inline-flex flex-wrap justify-center sm:justify-stretch gap-4 mx-auto lg:mx-0">
           <ViewValueProduct
             data={{
               title: "Valor unitário",
-              price: data.unit_price,
+              price: data.unitValue,
               isMoney: true,
               gap: "gap-0",
               sizeText: "text-md",
@@ -35,7 +39,7 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
           <ViewValueProduct
             data={{
               title: "Valor estoque",
-              price: data.stock_value,
+              price: data.stockValue,
               isMoney: true,
               gap: "gap-0",
               sizeText: "text-md",
@@ -51,7 +55,7 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
             }}
           ></ViewValueProduct>
         </span>
-        <span className="inline-flex flex-wrap justify-center sm:justify-stretch gap-4  max-w-64 sm:max-w-96  lg:mx-0 mx-auto">
+        {/* <span className="inline-flex flex-wrap justify-center sm:justify-stretch gap-4  max-w-64 sm:max-w-96  lg:mx-0 mx-auto">
           {data.categories.map((category, index) => {
             return (
               <div
@@ -62,7 +66,7 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
               </div>
             );
           })}
-        </span>
+        </span> */}
       </div>
       <div className="flex flex-row my-11 lg:my-0 lg:flex-col gap-2 mx-8">
         <button

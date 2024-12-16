@@ -47,30 +47,28 @@ const Stock = () => {
     <>
       {products.isLoading && <WindowLoad></WindowLoad>}
       {viewProductOpen ? (
-        <div className="bg-black/50 fixed w-full h-full z-20"></div>
+        <div className="bg-black/50 fixed w-full h-full z-40"></div>
       ) : null}
-
+      {viewProductOpen ? (
+        <ViewProduct
+          data={{
+            image: selectedProduct?.photo
+              ? URL.createObjectURL(selectedProduct?.photo)
+              : null,
+            description: "Descrição",
+            quantity: selectedProduct?.quantity,
+            stock_value: `${selectedProduct?.stockValue}`,
+            title: `${selectedProduct?.name}`,
+            unit_price: `${selectedProduct?.unitValue}`,
+          }}
+          close={() => {
+            setViewProductOpen(!viewProductOpen);
+          }}
+        ></ViewProduct>
+      ) : null}
       <Header></Header>
 
       <main className="relative max-w-[1100px] w-full px-8 sm:p-0 sm:w-[500px] md:w-[700px] backgroundLoginPoint:w-[1100px]  mx-auto mt-8 mb-20">
-        {viewProductOpen ? (
-          <ViewProduct
-            data={{
-              image: selectedProduct?.photo
-                ? URL.createObjectURL(selectedProduct?.photo)
-                : null,
-              description: "Descrição",
-              quantity: selectedProduct?.quantity,
-              stock_value: `${selectedProduct?.stockValue}`,
-              title: `${selectedProduct?.name}`,
-              unit_price: `${selectedProduct?.unitValue}`,
-            }}
-            close={() => {
-              setViewProductOpen(!viewProductOpen);
-            }}
-          ></ViewProduct>
-        ) : null}
-
         <section className="flex flex-col gap-5">
           <h1 className="font-extrabold text-xl">Catálogo de produtos</h1>
           <FilterProducts
@@ -91,9 +89,7 @@ const Stock = () => {
                 key={product.id}
                 click={() => {
                   setSelectedProduct({
-                    photo: product.photo
-                      ? product.photo
-                      : "https://placehold.co/600x400",
+                    photo: product.photo ? product.photo : null,
                     name: `${product.name}`,
                     stockValue: product.stockValue,
                     unitValue: product.unitValue,
@@ -106,7 +102,7 @@ const Stock = () => {
                 data={{
                   disponible: product.quantity > 0 ? true : false,
                   imageUrl: product.photo
-                    ? product.photo
+                    ? URL.createObjectURL(product.photo)
                     : "https://placehold.co/600x400",
                   title: `${product.name}`,
                 }}

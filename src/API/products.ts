@@ -1,7 +1,7 @@
 import axios from "axios";
 import { api } from "./base";
 import { getProductsType } from "@/types/getProductsType";
-import { Product, ProductDataResponse } from "@/types/productType";
+import { ProductDataResponse } from "@/types/productType";
 
 export const getProducts = async ({
   token,
@@ -9,6 +9,7 @@ export const getProducts = async ({
   searchName,
   category,
 }: getProductsType): Promise<ProductDataResponse | null> => {
+  console.log(searchName);
   try {
     const response = await api.get(
       `/products?page=${
