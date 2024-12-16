@@ -11,7 +11,7 @@ const WindowAddProduct = ({ sendClose }: Props) => {
       <h1 className="uppercase font-bold text-lg sm:text-2xl mb-4">
         Dados do produto
       </h1>
-      <FormProduct>
+      <FormProduct sendClose={sendClose}>
         <button
           onClick={(e) => {
             e.preventDefault();

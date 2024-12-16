@@ -7,16 +7,35 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import ProductType from "@/types/productType";
 import WindowAddNewCategory from "./WindowAddNewCategory";
+import { useSession } from "next-auth/react";
+import { useAddProduct } from "./../../../mutations/ProductMutations";
+import { AddProductType } from "./../../../API/products";
+import WindowLoad from "../WindowLoad/WindowLoad";
+import WindowSuccess from "../WindowSuccess/WindowSuccess";
 
 type FormData = z.infer<typeof SchemaProduct>;
 type Props = {
   children: React.ReactNode;
   isEdit?: boolean;
   idProduct?: number;
+  sendClose: () => void;
 };
-const FormProduct = ({ children, isEdit, idProduct }: Props) => {
+
+type ProductType = {
+  id: number;
+  title: string;
+  image: string;
+  unit_price: string;
+  stock_value: string;
+  quantity: number;
+  categories: string[];
+  criticalQuantityStock: number;
+  description: string;
+};
+
+const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
+  const { data: session } = useSession();
   const {
     register,
     handleSubmit,
@@ -40,15 +59,38 @@ const FormProduct = ({ children, isEdit, idProduct }: Props) => {
     criticalQuantityStock: 0,
     description: "",
   });
+  const addProduct = useAddProduct();
   const [priceState, setPriceState] = useState("");
   const [imageSelected, setImageSelected] = useState<File | null>(null);
   const [showWindowNewCategory, setShowWindowNewCategory] = useState(false);
+  const [showWindowSuccess, setShowWindowSuccess] = useState(false);
   const price = watch("unit_price");
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (imageSelected === null && selectedProduct.image === "") {
       alert("Selecione uma imagem");
     }
-    console.log(data, imageSelected);
+    //console.log(data, imageSelected);
+
+    const sendData: {
+      token: string;
+      data: AddProductType;
+    } = {
+      token: session?.accessToken as string,
+      data: {
+        name: data.title,
+        unit_value: +data.unit_price,
+        quantity: +data.quantity,
+        critical_quantity: +data.criticalQuantityStock,
+        //categories: data.categories,
+        //description: data.description,
+        photo: imageSelected,
+      },
+    };
+    addProduct.mutate(sendData, {
+      onSuccess: () => {
+        setShowWindowSuccess(true);
+      },
+    });
   };
 
   const handleImageChange = (img: HTMLInputElement) => {
@@ -117,6 +159,16 @@ const FormProduct = ({ children, isEdit, idProduct }: Props) => {
 
   return (
     <>
+      {showWindowSuccess && (
+        <WindowSuccess
+          text="Produto cadastrado com sucesso!"
+          sendClose={() => {
+            setShowWindowSuccess(false);
+            sendClose();
+          }}
+        ></WindowSuccess>
+      )}
+      {addProduct.isPending && <WindowLoad></WindowLoad>}
       {showWindowNewCategory && (
         <div className="w-full h-full flex justify-center items-center fixed bg-black/50 z-40 top-0 right-0">
           <WindowAddNewCategory

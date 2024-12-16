@@ -1,10 +1,17 @@
 "use client";
+
+import { useGetCategories } from "@/queries/CategoriesQueries";
+import { useSession } from "next-auth/react";
+
 type Props = {
   sendName: (name: string) => void;
-  sendCategory: (category: string) => void;
+  sendCategory: (category: number | null) => void;
   isUser?: boolean;
 };
 const FilterProducts = ({ sendName, sendCategory, isUser }: Props) => {
+  const { data: session } = useSession();
+  const getCategories = useGetCategories(session?.accessToken as string);
+
   return (
     <form className=" flex flex-col md:flex-row sm:w-[500px] md:w-[700px] gap-5 shadow-lg rounded-lg bg-white backgroundLoginPoint:w-full py-4 px-8 justify-between items-center">
       <label className="border-b-2 border-slate-300 bg-transparent w-full inline-flex justify-between">
@@ -38,19 +45,32 @@ const FilterProducts = ({ sendName, sendCategory, isUser }: Props) => {
       ) : (
         <>
           <select
+            id="category_select"
             onChange={(e) => {
-              sendCategory(e.target.value);
+              sendCategory(+e.target.value);
             }}
             className="bg-transparent border-b-2 text-slate-400 w-full py-1 focus:outline-none focus:font-bold"
             name=""
-            id=""
           >
             <option value="default" selected disabled>
               Selecione uma categoria
             </option>
-            <option value="1">Qualquer coisa</option>
+            {getCategories.data?.map((category) => {
+              return (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              );
+            })}
           </select>
           <button
+            onClick={() => {
+              sendCategory(null);
+              const selectElement = document.querySelector(
+                "#category_select"
+              ) as HTMLSelectElement;
+              selectElement.value = "default";
+            }}
             className="font-extrabold text-nowrap uppercase px-9 py-1 text-slate-400 border-[1px] border-slate-300 rounded-md hover:scale-105 transition-all duration-200 hover:text-black hover:border-black md:w-[500px]"
             type="reset"
           >

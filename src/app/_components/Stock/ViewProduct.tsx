@@ -3,7 +3,7 @@ import ViewValueProduct from "./ViewValueProduct";
 type Props = {
   close: () => void;
   data: {
-    image: string;
+    image: string | null;
     title: string;
     unit_price: string;
     stock_value: string;
