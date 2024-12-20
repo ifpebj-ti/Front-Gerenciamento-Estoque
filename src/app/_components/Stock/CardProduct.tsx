@@ -19,7 +19,7 @@ const CardProduct = ({ data, click }: Props) => {
       className="hover:scale-105 transtion-all ease-in-out duration-200 cursor-pointer flex flex-col shadow-lg h-72 w-64 bg-white rounded-lg"
     >
       <Image
-        className="shadow-sm border-[1px] border-slate-100 rounded-t-lg"
+        className="shadow-sm border-[1px] border-slate-100 rounded-t-lg min-h-40"
         src={data.imageUrl}
         alt="Imagem do produto"
         objectFit="fill"

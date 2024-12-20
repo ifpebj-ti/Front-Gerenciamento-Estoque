@@ -3,8 +3,8 @@ import SchemaProduct from "./../../../app/_zod/SchemaProduct";
 import formatMoney from "@/utils/moneyFormat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import React, { use, useEffect, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import WindowAddNewCategory from "./WindowAddNewCategory";
 import { useSession } from "next-auth/react";
@@ -12,6 +12,10 @@ import { useAddProduct } from "./../../../mutations/ProductMutations";
 import { AddProductType } from "./../../../API/products";
 import WindowLoad from "../WindowLoad/WindowLoad";
 import WindowSuccess from "../WindowSuccess/WindowSuccess";
+import { useGetCategories } from "@/queries/CategoriesQueries";
+import { CategoriesType } from "@/types/productType";
+import { useGetProduct } from "@/queries/ProductsQueries";
+import base64ToBlob from "@/utils/convertImage";
 
 type FormData = z.infer<typeof SchemaProduct>;
 type Props = {
@@ -40,11 +44,13 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
     handleSubmit,
     watch,
     setValue,
+    control,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(SchemaProduct),
     defaultValues: {
       unit_price: "", // Garante um valor inicial como string
+      categories: [],
     },
   });
   const [selectedProduct, setSelectedProduct] = useState<ProductType>({
@@ -64,6 +70,9 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
   const [showWindowNewCategory, setShowWindowNewCategory] = useState(false);
   const [showWindowSuccess, setShowWindowSuccess] = useState(false);
   const price = watch("unit_price");
+  const categoriesRegistered = useGetCategories(session?.accessToken as string);
+  const [isFormInitialized, setIsFormInitialized] = useState(false);
+
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (imageSelected === null && selectedProduct.image === "") {
       alert("Selecione uma imagem");
@@ -71,6 +80,7 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
     //console.log(data, imageSelected);
     // Disable when using a mutation
     console.log(idProduct);
+    console.log(data);
     const sendData: {
       token: string;
       data: AddProductType;
@@ -81,8 +91,8 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
         unit_value: +data.unit_price,
         quantity: +data.quantity,
         critical_quantity: +data.criticalQuantityStock,
-        //categories: data.categories,
-        //description: data.description,
+        categories: data.categories,
+        description: data.description,
         photo: imageSelected,
       },
     };
@@ -136,28 +146,43 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
 
   // Criar requisição para obter o produto
 
-  // useEffect(() => {
-  //   (function () {
-  //     if (isEdit) {
-  //       // Requisição do produto
-  //       const product = products.find((product) => product.id === idProduct);
+  const product = useGetProduct({
+    token: session?.accessToken as string,
+    id: idProduct as number,
+  });
 
-  //       setValue("title", product?.title as string);
-  //       setValue("unit_price", product?.unit_price as string);
-  //       setValue(
-  //         "criticalQuantityStock",
-  //         `${product?.criticalQuantityStock as number}`
-  //       );
-  //       setValue("quantity", `${product?.quantity as number}`);
-  //       setValue("description", product?.description as string);
-  //       setSelectedProduct(product as ProductType);
-  //       // const image = document.querySelector(
-  //       //   "#imagePreview"
-  //       // ) as HTMLImageElement;
-  //       // image.src = product?.image as string;
-  //     }
-  //   })();
-  // }, [isEdit, idProduct, setValue]);
+  const initializeForm = () => {
+    if (isEdit && product && product.data) {
+      setValue("title", product.data.name as string);
+      setValue("unit_price", `${product.data.unitValue}`);
+      setValue(
+        "criticalQuantityStock",
+        `${product.data.critical_quantity as number}`
+      );
+      setValue("quantity", `${product.data.quantity as number}`);
+      setValue("description", product.data.description as string);
+      setValue("categories", product.data.categories || []);
+      setSelectedProduct({
+        id: product.data.id,
+        title: product.data.name,
+        image: product.data.photo ? base64ToBlob(product.data.photo) : "",
+        unit_price: `${product.data.unitValue}`,
+        stock_value: `${product.data.stockValue || 0}`,
+        quantity: product.data.quantity,
+        categories: product.data.categories || [],
+        criticalQuantityStock: product.data.critical_quantity,
+        description: product.data.description,
+      });
+    }
+  };
+
+  /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (isEdit && product && product.data && !isFormInitialized) {
+      initializeForm();
+      setIsFormInitialized(true);
+    }
+  }, [isEdit, product, isFormInitialized]);
 
   return (
     <>
@@ -197,19 +222,50 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
               {errors.title?.message}
             </span>
           </div>
-          <div className="flex flex-col gap-2 ">
-            <select
-              className="bg-white border-2 rounded-md border-slate-200 w-full placeholder:text-slate-400 p-2"
-              {...register("categories")}
-            >
-              <option value="0" selected disabled>
-                Selecione uma categoria
-              </option>
-            </select>
-            <span className="text-sm text-red-500">
-              {errors.categories?.message}
-            </span>
+          {/* Init categories*/}
+          <div className="w-full flex flex-col justify-center items-center">
+            <label className="font-bold text-lg">Selecione as categorias</label>
+            <Controller
+              name="categories"
+              control={control}
+              render={({ field }) => (
+                <div className="border-b-2 border-slate-200 border-t-2 p-2 w-full flex flex-wrap justify-start items-center gap-5">
+                  {categoriesRegistered.data &&
+                    categoriesRegistered.data.map(
+                      (category: CategoriesType) => (
+                        <label
+                          className="flex justify-center items-center gap-1"
+                          key={category.id}
+                        >
+                          <input
+                            className="w-4 h-4"
+                            type="checkbox"
+                            value={category.id}
+                            checked={field.value.includes(category.id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                field.onChange([...field.value, category.id]); // Add category
+                              } else {
+                                field.onChange(
+                                  field.value.filter(
+                                    (item) => item !== category.id
+                                  ) // Remove category
+                                );
+                              }
+                            }}
+                          />
+                          {category.name}
+                        </label>
+                      )
+                    )}
+                </div>
+              )}
+            />
+            {errors.categories && <span>{errors.categories.message}</span>}
           </div>
+
+          {/* End categories*/}
+
           <div className="flex justify-center items-center">
             <button
               onClick={(e) => {

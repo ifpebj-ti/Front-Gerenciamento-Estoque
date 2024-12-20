@@ -38,10 +38,10 @@ const Admin = () => {
   });
 
   // Resetar a página ao mudar os filtros
-  useEffect(() => {
-    setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
-    products.refetch(); // Refaz a requisição quando os filtros mudarem
-  }, [filters, products]);
+  // useEffect(() => {
+  //   setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
+  //   products.refetch(); // Refaz a requisição quando os filtros mudarem
+  // }, [filters, products]);
   const renderSession = () => {
     switch (currentSession) {
       case 0:

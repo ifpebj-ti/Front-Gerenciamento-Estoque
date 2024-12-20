@@ -9,6 +9,7 @@ import { useGetProducts } from "@/queries/ProductsQueries";
 import { useSession } from "next-auth/react";
 import WindowLoad from "../_components/WindowLoad/WindowLoad";
 import { Product } from "@/types/productType";
+import base64ToBlob from "@/utils/convertImage";
 
 const Stock = () => {
   const { data: session } = useSession();
@@ -20,9 +21,11 @@ const Stock = () => {
   });
   const [currentPage, setCurrentPage] = useState(1); // Controle da página
   const [selectedProduct, setSelectedProduct] = useState<Product>({
-    photo: null,
+    photo: "",
     quantity: 0,
     unitValue: 0,
+    description: "",
+    categories: [],
     name: "",
     stockValue: 0,
     critical_quantity: 0,
@@ -38,10 +41,10 @@ const Stock = () => {
   });
 
   // Resetar a página ao mudar os filtros
-  useEffect(() => {
-    setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
-    products.refetch(); // Refaz a requisição quando os filtros mudarem
-  }, [filters, products]);
+  // useEffect(() => {
+  //   setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
+  //   products.refetch(); // Refaz a requisição quando os filtros mudarem
+  // }, [filters, products]);
 
   return (
     <>
@@ -52,14 +55,14 @@ const Stock = () => {
       {viewProductOpen ? (
         <ViewProduct
           data={{
-            image: selectedProduct?.photo
-              ? URL.createObjectURL(selectedProduct?.photo)
+            image: selectedProduct.photo
+              ? base64ToBlob(selectedProduct?.photo)
               : null,
-            description: "Descrição",
-            quantity: selectedProduct?.quantity,
-            stock_value: `${selectedProduct?.stockValue}`,
-            title: `${selectedProduct?.name}`,
-            unit_price: `${selectedProduct?.unitValue}`,
+            description: selectedProduct.description,
+            quantity: selectedProduct.quantity,
+            stock_value: `${selectedProduct.stockValue}`,
+            title: `${selectedProduct.name}`,
+            unit_price: `${selectedProduct.unitValue}`,
           }}
           close={() => {
             setViewProductOpen(!viewProductOpen);
@@ -91,6 +94,8 @@ const Stock = () => {
                   setSelectedProduct({
                     photo: product.photo ? product.photo : null,
                     name: `${product.name}`,
+                    description: product.description,
+                    categories: product.categories,
                     stockValue: product.stockValue,
                     unitValue: product.unitValue,
                     quantity: product.quantity,
@@ -102,7 +107,7 @@ const Stock = () => {
                 data={{
                   disponible: product.quantity > 0 ? true : false,
                   imageUrl: product.photo
-                    ? URL.createObjectURL(product.photo)
+                    ? base64ToBlob(product.photo)
                     : "https://placehold.co/600x400",
                   title: `${product.name}`,
                 }}

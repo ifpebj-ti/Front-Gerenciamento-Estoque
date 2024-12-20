@@ -1,3 +1,8 @@
+export type CategoriesType = {
+  id: number;
+  name: string;
+};
+
 export type ProductType = {
   id: number;
   title: string;
@@ -5,7 +10,7 @@ export type ProductType = {
   unit_price: string;
   stock_value: string;
   quantity: number;
-  categories: string[];
+  categories: CategoriesType[];
   criticalQuantityStock: number;
   description: string;
 };
@@ -14,7 +19,9 @@ export interface Product {
   id: number;
   name: string;
   quantity: number;
-  photo: File | null;
+  photo: string | null;
+  description: string;
+  categories: CategoriesType[];
   critical_quantity: number;
   unitValue: number;
   stockValue: number;

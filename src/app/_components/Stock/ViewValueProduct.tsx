@@ -14,7 +14,7 @@ const ViewValueProduct = ({ data }: Props) => {
   const valueFormatted = formatMoney(`${data.price}`);
   return (
     <div
-      className={`${
+      className={`justify-between ${
         data.sizeText ? "text-md" : ""
       } text-slate-400 flex flex-col ${
         data.gap ? data.gap : "gap-2"

@@ -25,19 +25,19 @@ const ViewProduct = ({ close, data }: Props) => {
           VOLTAR
         </div>
         <div className="flex backgroundLoginPoint:flex-row flex-col items-center backgroundLoginPoint:items-stretch gap-10">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-center items-center gap-4">
             <div
               style={{
                 backgroundImage: `url(${
                   data.image ? data.image : "https://placehold.co/600x400"
                 })`,
               }}
-              className="w-[18rem] h-[18rem] sm:w-[30rem] sm:h-[30rem] object-contain bg-contain bg-center border-[1px] border-slate-300 rounded-lg bg-no-repeat"
+              className=" w-[18rem] h-[18rem] sm:w-[25rem] sm:h-[25rem] object-contain bg-contain bg-center border-[1px] border-slate-300 rounded-lg bg-no-repeat"
             ></div>
             <h1 className="w-[30ch] font-bold text-md sm:text-2xl">
               {data.title}
             </h1>
-            <div className="flex sm:flex-row flex-col gap-4 sm:gap-8 ">
+            <div className="flex flex-wrap md:flex-nowrap  gap-4 sm:gap-8 ">
               <ViewValueProduct
                 data={{
                   title: "Valor unitário",

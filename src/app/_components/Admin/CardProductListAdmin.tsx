@@ -1,5 +1,7 @@
-import { Product } from "@/types/productType";
+"use client";
+import { CategoriesType, Product } from "@/types/productType";
 import ViewValueProduct from "../Stock/ViewValueProduct";
+import base64ToBlob from "../../../utils/convertImage";
 
 type Props = {
   data: Product;
@@ -12,7 +14,7 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
         style={{
           backgroundImage: `url(${
             data.photo
-              ? URL.createObjectURL(data.photo)
+              ? base64ToBlob(data.photo)
               : "https://placehold.co/600x400"
           })`,
           backgroundSize: "contain",
@@ -55,18 +57,18 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
             }}
           ></ViewValueProduct>
         </span>
-        {/* <span className="inline-flex flex-wrap justify-center sm:justify-stretch gap-4  max-w-64 sm:max-w-96  lg:mx-0 mx-auto">
-          {data.categories.map((category, index) => {
+        <span className="inline-flex flex-wrap justify-center sm:justify-stretch gap-4  max-w-64 sm:max-w-96  lg:mx-0 mx-auto">
+          {data.categories.map((category: CategoriesType) => {
             return (
               <div
                 className="px-4 py-1 bg-slate-200 rounded-lg text-nowrap"
-                key={index}
+                key={category.id}
               >
-                {category}
+                {category.name}
               </div>
             );
           })}
-        </span> */}
+        </span>
       </div>
       <div className="flex flex-row my-11 lg:my-0 lg:flex-col gap-2 mx-8">
         <button

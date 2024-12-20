@@ -2,6 +2,7 @@ import axios from "axios";
 import { api } from "./base";
 import { getProductsType } from "@/types/getProductsType";
 import { ProductDataResponse } from "@/types/productType";
+import { categoryType } from "@/types/categoryType";
 
 export const getProducts = async ({
   token,
@@ -35,6 +36,8 @@ export type AddProductType = {
   unit_value: number;
   quantity: number;
   critical_quantity: number;
+  description: string;
+  categories: number[];
   photo: File | null;
 };
 
@@ -50,6 +53,28 @@ export const addPost = async ({
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+export const getProduct = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: number;
+}) => {
+  try {
+    const response = await api.get(`/products/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
