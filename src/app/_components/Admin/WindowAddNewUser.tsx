@@ -1,9 +1,9 @@
 import FormAlterData from "../Profile/FormAlterData";
-import { UserType } from "@/types/userType";
+import { UserInfoType } from "@/types/userType";
 
 type Props = {
   sendClose: () => void;
-  data?: UserType | null;
+  data?: UserInfoType | null;
   isEditMode?: boolean;
 };
 
@@ -15,10 +15,12 @@ const WindowAddNewUser = ({ sendClose, data, isEditMode }: Props) => {
       </h1>
       <FormAlterData
         data={{
-          avatar: data?.avatar || "",
+          // avatar: data?.avatar || "",
           email: data?.email || "",
           id: data?.id || 0,
           name: data?.name || "",
+          status: data?.status || false,
+          roles: data?.roles || [],
         }}
         isEditMode={true}
       >

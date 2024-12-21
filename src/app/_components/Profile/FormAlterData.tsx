@@ -6,12 +6,12 @@ import {
   SchemaFormAlterData,
 } from "@/app/_zod/SchemaFormAlterData";
 import React, { useEffect, useState } from "react";
-import { UserType } from "@/types/userType";
+import { UserInfoType } from "@/types/userType";
 
 type Props = {
   children: React.ReactNode;
   isEditMode: boolean;
-  data: UserType;
+  data: UserInfoType;
 };
 const FormAlterData = ({ children, isEditMode, data }: Props) => {
   const {
@@ -74,7 +74,7 @@ const FormAlterData = ({ children, isEditMode, data }: Props) => {
           }
         }}
         style={{
-          backgroundImage: `url(${data?.avatar})`,
+          backgroundImage: `url(https://placehold.co/600x400)`,
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
@@ -82,11 +82,11 @@ const FormAlterData = ({ children, isEditMode, data }: Props) => {
       >
         {isEditMode && (
           <>
-            <div className="absolute w-full h-full hover:bg-black/25 rounded-full cursor-pointer opacity-0 hover:opacity-100 flex justify-center items-center text-white font-bold">
+            {/* <div className="absolute w-full h-full hover:bg-black/25 rounded-full cursor-pointer opacity-0 hover:opacity-100 flex justify-center items-center text-white font-bold">
               {data?.avatar !== ""
                 ? "Mudar foto do perfil"
                 : "Adicionar foto no perfil"}
-            </div>
+            </div> */}
             <svg
               className="absolute bottom-0 right-0 -translate-x-1/2 -translate-y-1/2"
               width="46"
@@ -141,7 +141,7 @@ const FormAlterData = ({ children, isEditMode, data }: Props) => {
           </>
         )}
 
-        {!data?.avatar && <div className="font-bold">Sem imagem ):</div>}
+        {/* {!data?.avatar && <div className="font-bold">Sem imagem ):</div>} */}
       </div>
       <div className="flex flex-col justify-evenly h-56">
         <div className="flex flex-col gap-4">

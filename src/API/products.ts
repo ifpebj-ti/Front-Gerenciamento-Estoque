@@ -2,7 +2,6 @@ import axios from "axios";
 import { api } from "./base";
 import { getProductsType } from "@/types/getProductsType";
 import { ProductDataResponse } from "@/types/productType";
-import { categoryType } from "@/types/categoryType";
 
 export const getProducts = async ({
   token,
@@ -15,7 +14,7 @@ export const getProducts = async ({
     const response = await api.get(
       `/products?page=${
         currentPage ? currentPage - 1 : 0
-      }&size=20&sort=name,desc${category ? `&categoryId=${category}` : ""}`,
+      }&size=4&sort=name,desc${category ? `&categoryId=${category}` : ""}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,6 +72,53 @@ export const getProduct = async ({
 }) => {
   try {
     const response = await api.get(`/products/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+export const updateProduct = async ({
+  token,
+  id,
+  data,
+}: {
+  token: string;
+  id: number | undefined;
+  data: AddProductType;
+}) => {
+  console.log(data);
+  try {
+    const response = await api.put(`/products/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return null;
+    }
+  }
+};
+
+export const deleteProduct = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: number;
+}) => {
+  try {
+    const response = await api.delete(`/products/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

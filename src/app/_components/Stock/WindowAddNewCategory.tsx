@@ -1,18 +1,31 @@
 "use client";
 
+import { useAddCategory } from "@/mutations/CategoryMutations";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 type Props = {
   sendClose: () => void;
 };
 const WindowAddNewCategory = ({ sendClose }: Props) => {
+  const { data: session } = useSession();
   const [data, setData] = useState("");
+
+  const registerCategory = useAddCategory();
 
   const sendData = (data: string) => {
     if (data.trim().length < 3) {
       alert("Digite alguma categoria");
     }
-    console.log(data);
+    const sendData = {
+      token: session?.accessToken as string,
+      name: data,
+    };
+    registerCategory.mutate(sendData, {
+      onSuccess: () => {
+        sendClose();
+      },
+    });
   };
   return (
     <form className="p-8 bg-white flex flex-col gap-5 rounded-lg" action="">

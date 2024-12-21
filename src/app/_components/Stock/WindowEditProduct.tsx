@@ -4,16 +4,22 @@ import FormProduct from "./FormProduct";
 type Props = {
   sendClose: () => void;
   id: number;
+  refetchProducts?: () => void;
 };
 
-const WindowEditProduct = ({ sendClose, id }: Props) => {
+const WindowEditProduct = ({ sendClose, id, refetchProducts }: Props) => {
   return (
     <>
       <div className="  bg-white text-center sm:text-start py-4 sm:py-16 px-8 w-full rounded-lg ">
         <h1 className="uppercase font-bold text-lg sm:text-2xl mb-4">
           Dados do produto - Edição
         </h1>
-        <FormProduct sendClose={sendClose} isEdit={true} idProduct={id}>
+        <FormProduct
+          refetchProducts={refetchProducts}
+          sendClose={sendClose}
+          isEdit={true}
+          idProduct={id}
+        >
           <button
             onClick={(e) => {
               e.preventDefault();

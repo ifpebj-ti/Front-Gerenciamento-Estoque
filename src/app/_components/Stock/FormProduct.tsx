@@ -3,12 +3,15 @@ import SchemaProduct from "./../../../app/_zod/SchemaProduct";
 import formatMoney from "@/utils/moneyFormat";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import WindowAddNewCategory from "./WindowAddNewCategory";
 import { useSession } from "next-auth/react";
-import { useAddProduct } from "./../../../mutations/ProductMutations";
+import {
+  useAddProduct,
+  useUpdateProduct,
+} from "./../../../mutations/ProductMutations";
 import { AddProductType } from "./../../../API/products";
 import WindowLoad from "../WindowLoad/WindowLoad";
 import WindowSuccess from "../WindowSuccess/WindowSuccess";
@@ -23,6 +26,7 @@ type Props = {
   isEdit?: boolean;
   idProduct?: number;
   sendClose: () => void;
+  refetchProducts?: () => void;
 };
 
 type ProductType = {
@@ -37,7 +41,13 @@ type ProductType = {
   description: string;
 };
 
-const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
+const FormProduct = ({
+  children,
+  isEdit,
+  idProduct,
+  sendClose,
+  refetchProducts,
+}: Props) => {
   const { data: session } = useSession();
   const {
     register,
@@ -65,6 +75,7 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
     description: "",
   });
   const addProduct = useAddProduct();
+  const editProduct = useUpdateProduct();
   const [priceState, setPriceState] = useState("");
   const [imageSelected, setImageSelected] = useState<File | null>(null);
   const [showWindowNewCategory, setShowWindowNewCategory] = useState(false);
@@ -72,19 +83,21 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
   const price = watch("unit_price");
   const categoriesRegistered = useGetCategories(session?.accessToken as string);
   const [isFormInitialized, setIsFormInitialized] = useState(false);
-
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (imageSelected === null && selectedProduct.image === "") {
       alert("Selecione uma imagem");
     }
     //console.log(data, imageSelected);
     // Disable when using a mutation
+    console.log(imageSelected);
     console.log(idProduct);
     console.log(data);
     const sendData: {
+      id: number;
       token: string;
       data: AddProductType;
     } = {
+      id: 0,
       token: session?.accessToken as string,
       data: {
         name: data.title,
@@ -96,11 +109,25 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
         photo: imageSelected,
       },
     };
-    addProduct.mutate(sendData, {
-      onSuccess: () => {
-        setShowWindowSuccess(true);
-      },
-    });
+    if (isEdit) {
+      sendData.id = idProduct as number;
+      if (sendData.id) {
+        editProduct.mutate(sendData, {
+          onSuccess: () => {
+            if (refetchProducts) {
+              refetchProducts();
+              setShowWindowSuccess(true);
+            }
+          },
+        });
+      }
+    } else {
+      addProduct.mutate(sendData, {
+        onSuccess: () => {
+          setShowWindowSuccess(true);
+        },
+      });
+    }
   };
 
   const handleImageChange = (img: HTMLInputElement) => {
@@ -118,7 +145,7 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
           alert("Tipo de imagem inválido");
           return null;
         }
-        if (sizeImage > 5 * 1024 * 1024) {
+        if (sizeImage > 1024) {
           alert("O tamanho da imagem deve ser menor que 5 mb");
           return null;
         }
@@ -161,7 +188,10 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
       );
       setValue("quantity", `${product.data.quantity as number}`);
       setValue("description", product.data.description as string);
-      setValue("categories", product.data.categories || []);
+      const idsCategoriesSelecteds = product.data.categories.map(
+        (item: { name: string; id: number }) => item.id
+      );
+      setValue("categories", idsCategoriesSelecteds || []);
       setSelectedProduct({
         id: product.data.id,
         title: product.data.name,
@@ -176,12 +206,17 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
     }
   };
 
-  /* eslint-disable-next-line react-hooks/exhaustive-deps */
   useEffect(() => {
-    if (isEdit && product && product.data && !isFormInitialized) {
+    if (
+      isEdit &&
+      !product.isLoading &&
+      product &&
+      product.data &&
+      !isFormInitialized
+    ) {
       initializeForm();
       setIsFormInitialized(true);
-    }
+    } /* eslint-disable-next-line*/
   }, [isEdit, product, isFormInitialized]);
 
   return (
@@ -201,6 +236,7 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
           <WindowAddNewCategory
             sendClose={() => {
               setShowWindowNewCategory(!showWindowNewCategory);
+              categoriesRegistered.refetch();
             }}
           ></WindowAddNewCategory>
         </div>
@@ -331,6 +367,9 @@ const FormProduct = ({ children, isEdit, idProduct, sendClose }: Props) => {
               Selecionar Imagem
             </button>
             <input
+              onChange={(e) => {
+                e.preventDefault();
+              }}
               id="image"
               type="file"
               className="w-full hidden"

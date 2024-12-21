@@ -2,12 +2,17 @@
 import { CategoriesType, Product } from "@/types/productType";
 import ViewValueProduct from "../Stock/ViewValueProduct";
 import base64ToBlob from "../../../utils/convertImage";
+import { useSession } from "next-auth/react";
+import { useDeleteProduct } from "@/mutations/ProductMutations";
 
 type Props = {
   data: Product;
   sendOpenEditWindow: () => void;
+  refetch?: () => void;
 };
-const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
+const CardProductListAdmin = ({ data, sendOpenEditWindow, refetch }: Props) => {
+  const { data: session } = useSession();
+  const deleteProduct = useDeleteProduct();
   return (
     <div className="max-w-[1100px] w-full  sm:p-0 sm:w-[500px] lg:w-full   bg-white  rounded-lg flex flex-col lg:flex-row shadow-lg  justify-between items-center">
       <div
@@ -77,7 +82,24 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow }: Props) => {
         >
           editar
         </button>
-        <button className="text-sm sm:text-md hover:scale-110 hover:bg-red-700 hover:text-white transition-all ease-in-out duration-200 uppercase text-red-700 border-red-700 border-2 px-8 backgroundLoginPoint:px-16 py-1 rounded-lg">
+        <button
+          onClick={() => {
+            if (session?.accessToken && refetch) {
+              deleteProduct.mutate(
+                {
+                  token: session?.accessToken as string,
+                  id: data.id,
+                },
+                {
+                  onSuccess: () => {
+                    refetch();
+                  },
+                }
+              );
+            }
+          }}
+          className="text-sm sm:text-md hover:scale-110 hover:bg-red-700 hover:text-white transition-all ease-in-out duration-200 uppercase text-red-700 border-red-700 border-2 px-8 backgroundLoginPoint:px-16 py-1 rounded-lg"
+        >
           excluir
         </button>
       </div>

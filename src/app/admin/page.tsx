@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CardProductListAdmin from "../_components/Admin/CardProductListAdmin";
 import SelectSession from "../_components/Admin/SelectSession";
 import Header from "../_components/Header/Header";
@@ -9,13 +9,13 @@ import OPTIONS from "../_CONSTANTS/OptionsSession";
 import WindowAddProduct from "../_components/Stock/WindowAddProduct";
 import WindowEditProduct from "../_components/Stock/WindowEditProduct";
 import CardUserListAdmin from "../_components/Admin/CardUserListAdmin";
-import { MockUsers } from "../_CONSTANTS/MockUsers";
 import WindowAddNewUser from "../_components/Admin/WindowAddNewUser";
-import { UserType } from "@/types/userType";
+import { UserInfoType } from "@/types/userType";
 import { useSession } from "next-auth/react";
 import { useGetProducts } from "@/queries/ProductsQueries";
 import WindowLoad from "../_components/WindowLoad/WindowLoad";
 import { Product } from "@/types/productType";
+import { useGetUsers } from "@/queries/UsersQueries";
 
 const Admin = () => {
   const { data: session } = useSession();
@@ -24,7 +24,7 @@ const Admin = () => {
   const [showWindowEditProduct, setShowWindowEditProduct] = useState(false);
   const [showWindowAddNewUser, setShowWindowAddNewUser] = useState(false);
   const [productSelectToEdit, setProdutSelectToEdit] = useState(0);
-  const [userSelected, setUserSelected] = useState<UserType | null>(null);
+  const [userSelected, setUserSelected] = useState<UserInfoType | null>(null);
   const [searchByName, setSearchByName] = useState("");
   const [filters, setFilters] = useState<{ category: number | null }>({
     category: null,
@@ -36,6 +36,7 @@ const Admin = () => {
     searchName: `${searchByName ? searchByName : ""}`,
     category: filters.category,
   });
+  const users = useGetUsers(session?.accessToken as string);
 
   // Resetar a página ao mudar os filtros
   // useEffect(() => {
@@ -59,6 +60,7 @@ const Admin = () => {
             {products.data?.content.map((product: Product) => {
               return (
                 <CardProductListAdmin
+                  refetch={products.refetch}
                   key={product.id}
                   sendOpenEditWindow={() => {
                     // alert("editar + " + product.id);
@@ -90,24 +92,19 @@ const Admin = () => {
             >
               Adicionar Usuário
             </button>
-            {MockUsers.map((user) => {
-              return (
-                <CardUserListAdmin
-                  data={user}
-                  key={user.id}
-                  sendOpenEditWindow={() => {
-                    setShowWindowAddNewUser(true);
-                    setUserSelected(user);
-                  }}
-                ></CardUserListAdmin>
-              );
-            })}
-            <Pagination
-              sendCurrentPage={(page: number) => {
-                console.log(page);
-              }}
-              totalPages={10}
-            ></Pagination>
+            {users &&
+              users.data.map((user: UserInfoType) => {
+                return (
+                  <CardUserListAdmin
+                    data={user}
+                    key={user.id}
+                    sendOpenEditWindow={() => {
+                      setShowWindowAddNewUser(true);
+                      setUserSelected(user);
+                    }}
+                  ></CardUserListAdmin>
+                );
+              })}
           </>
         );
 
@@ -149,6 +146,7 @@ const Admin = () => {
           <div className="w-full  min-h-screen  bg-black/75 flex justify-center items-center fixed z-40 px-8"></div>
           <div className="absolute z-40 w-full flex justify-center items-center p-8">
             <WindowEditProduct
+              refetchProducts={products.refetch}
               id={productSelectToEdit}
               sendClose={() => {
                 setShowWindowEditProduct(!showWindowEditProduct);

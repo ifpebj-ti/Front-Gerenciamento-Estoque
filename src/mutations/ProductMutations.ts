@@ -1,4 +1,4 @@
-import { addPost } from "@/API/products";
+import { addPost, deleteProduct, updateProduct } from "@/API/products";
 import { useMutation } from "@tanstack/react-query";
 
 export const useAddProduct = () => {
@@ -6,5 +6,19 @@ export const useAddProduct = () => {
     mutationFn: addPost,
   });
 
+  return mutation;
+};
+
+export const useUpdateProduct = () => {
+  const mutation = useMutation({
+    mutationFn: updateProduct,
+  });
+  return mutation;
+};
+
+export const useDeleteProduct = () => {
+  const mutation = useMutation({
+    mutationFn: deleteProduct,
+  });
   return mutation;
 };

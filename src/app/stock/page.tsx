@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Header from "../_components/Header/Header";
 import CardProduct from "../_components/Stock/CardProduct";
 import FilterProducts from "../_components/Stock/FilterProducts";

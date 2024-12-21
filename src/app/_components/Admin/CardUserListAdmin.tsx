@@ -1,9 +1,9 @@
 "use client";
 
-import { UserType } from "@/types/userType";
+import { UserInfoType } from "@/types/userType";
 
 type Props = {
-  data: UserType;
+  data: UserInfoType;
   sendOpenEditWindow: () => void;
 };
 const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
@@ -11,7 +11,7 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
     <div className="max-w-[1100px] lg:w-[900px] w-full  sm:p-0 sm:w-[500px]   bg-white  rounded-lg flex flex-col lg:flex-row shadow-lg  justify-between items-center">
       <div
         style={{
-          backgroundImage: `url(${data.avatar})`,
+          backgroundImage: `url(https://placehold.co/600x400)`,
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -43,7 +43,7 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
           editar
         </button>
         <button className="text-sm sm:text-md hover:scale-110 hover:bg-red-700 hover:text-white transition-all ease-in-out duration-200 uppercase text-red-700 border-red-700 border-2 px-8 backgroundLoginPoint:px-16 py-1 rounded-lg">
-          excluir
+          desativar
         </button>
       </div>
     </div>
