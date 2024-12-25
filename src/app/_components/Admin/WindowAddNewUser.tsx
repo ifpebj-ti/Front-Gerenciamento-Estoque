@@ -23,6 +23,7 @@ const WindowAddNewUser = ({ sendClose, data, isEditMode }: Props) => {
           roles: data?.roles || [],
         }}
         isEditMode={true}
+        isRegister={true}
       >
         <button
           onClick={() => {

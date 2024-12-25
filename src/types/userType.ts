@@ -12,3 +12,11 @@ export interface UserInfoType {
   status: boolean;
   roles: { id: string; authority: string }[];
 }
+
+export interface UserRegisterType {
+  name: string;
+  email: string;
+  password: string;
+  status: boolean;
+  roles: { id: number }[];
+}

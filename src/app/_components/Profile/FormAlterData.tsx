@@ -6,14 +6,18 @@ import {
   SchemaFormAlterData,
 } from "@/app/_zod/SchemaFormAlterData";
 import React, { useEffect, useState } from "react";
-import { UserInfoType } from "@/types/userType";
+import { UserInfoType, UserRegisterType } from "@/types/userType";
+import { useAddUser } from "@/mutations/UserMutations";
+import { useSession } from "next-auth/react";
 
 type Props = {
   children: React.ReactNode;
   isEditMode: boolean;
   data: UserInfoType;
+  isRegister: boolean;
 };
-const FormAlterData = ({ children, isEditMode, data }: Props) => {
+const FormAlterData = ({ children, isEditMode, data, isRegister }: Props) => {
+  const { data: session } = useSession();
   const {
     register,
     handleSubmit,
@@ -25,6 +29,7 @@ const FormAlterData = ({ children, isEditMode, data }: Props) => {
   const [imageSelected, setImageSelected] = useState<File | null>(null);
 
   // Define `onSubmit` com o tipo `SubmitHandler<FormData>`
+  const addUser = useAddUser();
   const onSubmit: SubmitHandler<FormDataAlterDataType> = (value) => {
     if (
       value.name === data.name &&
@@ -32,6 +37,34 @@ const FormAlterData = ({ children, isEditMode, data }: Props) => {
       imageSelected === null
     ) {
       return null;
+    }
+    if (isEditMode) {
+      if (isRegister) {
+        const sendData: {
+          token: string;
+          data: UserRegisterType;
+        } = {
+          token: session?.accessToken as string,
+          data: {
+            name: value.name,
+            email: value.email,
+            status: true,
+            password: "12345678",
+            roles: [
+              {
+                id: 2,
+              },
+            ],
+          },
+        };
+
+        addUser.mutate(sendData, {
+          onSuccess: () => {},
+        });
+      } else {
+        // Edita
+      }
+    } else {
     }
     console.log({ value, imageSelected });
     // Lógica para envio do formulário

@@ -145,7 +145,7 @@ const FormProduct = ({
           alert("Tipo de imagem inválido");
           return null;
         }
-        if (sizeImage > 1024) {
+        if (sizeImage > 1024 * 1024 * 5) {
           alert("O tamanho da imagem deve ser menor que 5 mb");
           return null;
         }
