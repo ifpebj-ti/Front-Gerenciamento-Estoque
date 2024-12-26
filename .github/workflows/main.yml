@@ -49,4 +49,3 @@ jobs:
           -e NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} \
           -e NODE_ENV=production \
           --name deploy_frontend brazf/estoque-frontend
-        
