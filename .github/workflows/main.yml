@@ -1,4 +1,4 @@
-name: Deploy Application Front
+name: Deploy Application Front OCI
 
 on:
   push:
