@@ -29,9 +29,12 @@ export default withAuth(
 
     // Verifique se a rota atual é `/admin` e a role do usuário
     if (req.nextUrl.pathname.startsWith("/admin") && userInfo) {
-      const isAdmin = userInfo.roles.some(
-        (role) => role.authority === "ROLE_ADMIN"
-      );
+      let isAdmin;
+      if (userInfo.roles) {
+        isAdmin = userInfo.roles.some(
+          (role) => role.authority === "ROLE_ADMIN"
+        );
+      }
 
       if (!isAdmin) {
         const url = req.nextUrl.clone();

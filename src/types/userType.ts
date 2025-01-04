@@ -12,7 +12,7 @@ export interface UserInfoType {
   status: boolean;
   first_acess: boolean;
   photo: string | null;
-  roles: number[];
+  roles?: { id: number; authority: string }[];
 }
 
 export interface UserRegisterType {

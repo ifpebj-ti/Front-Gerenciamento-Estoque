@@ -85,18 +85,19 @@ const Header = () => {
                     Estoque
                   </Link>
                 </li>
-                {session?.userInfo.roles.find(
-                  (role) => role.authority === "ROLE_ADMIN"
-                ) && (
-                  <li className=" inline-flex w-full ">
-                    <Link
-                      className="uppercase  w-full text-center p-1"
-                      href={"/admin"}
-                    >
-                      Administração
-                    </Link>
-                  </li>
-                )}
+                {session.userInfo.roles &&
+                  session?.userInfo.roles.find(
+                    (role) => role.authority === "ROLE_ADMIN"
+                  ) && (
+                    <li className=" inline-flex w-full ">
+                      <Link
+                        className="uppercase  w-full text-center p-1"
+                        href={"/admin"}
+                      >
+                        Administração
+                      </Link>
+                    </li>
+                  )}
               </ul>
             </div>
           </div>
@@ -126,22 +127,23 @@ const Header = () => {
                   Estoque
                 </Link>
               </li>
-              {session?.userInfo.roles.find(
-                (role) => role.authority === "ROLE_ADMIN"
-              ) && (
-                <li>
-                  <Link
-                    className={`${
-                      route === "/admin"
-                        ? "font-extrabold text-white"
-                        : "font-normal text-white/80 hover:scale-105"
-                    } transition-all ease-in-out duration-200 hover:text-white p-4 inline-flex justify-center items-center uppercase`}
-                    href={"/admin"}
-                  >
-                    Administração
-                  </Link>
-                </li>
-              )}
+              {session.userInfo.roles &&
+                session?.userInfo.roles.find(
+                  (role) => role.authority === "ROLE_ADMIN"
+                ) && (
+                  <li>
+                    <Link
+                      className={`${
+                        route === "/admin"
+                          ? "font-extrabold text-white"
+                          : "font-normal text-white/80 hover:scale-105"
+                      } transition-all ease-in-out duration-200 hover:text-white p-4 inline-flex justify-center items-center uppercase`}
+                      href={"/admin"}
+                    >
+                      Administração
+                    </Link>
+                  </li>
+                )}
             </ul>
           </nav>
           <ProfileCard

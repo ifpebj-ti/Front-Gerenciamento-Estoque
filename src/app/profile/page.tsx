@@ -18,7 +18,9 @@ const Profile = () => {
         //   "https://images-americanas.b2w.io/produtos/3312202621/imagens/boneco-eufrazino-looney-tunes-10cm-nj-croce/3312202621_1_xlarge.jpg",
         name: "João Almeida e Silva",
         email: "joao@example.com",
-        roles: [],
+        first_acess: true,
+        roles: [{ id: 1, authority: "ROLE_USER" }],
+        photo: null,
         status: true,
       });
     })();
