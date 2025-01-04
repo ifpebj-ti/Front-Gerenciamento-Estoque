@@ -1,6 +1,7 @@
 "use client";
 
 import { UserInfoType } from "@/types/userType";
+import base64ToBlob from "@/utils/convertImage";
 
 type Props = {
   data: UserInfoType;
@@ -11,7 +12,11 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
     <div className="max-w-[1100px] lg:w-[900px] w-full  sm:p-0 sm:w-[500px]   bg-white  rounded-lg flex flex-col lg:flex-row shadow-lg  justify-between items-center">
       <div
         style={{
-          backgroundImage: `url(https://placehold.co/600x400)`,
+          backgroundImage: `url(${
+            data.photo
+              ? base64ToBlob(data.photo)
+              : "https://placehold.co/600x400"
+          })`,
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

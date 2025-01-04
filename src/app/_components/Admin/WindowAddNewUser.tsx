@@ -21,6 +21,8 @@ const WindowAddNewUser = ({ sendClose, data, isEditMode }: Props) => {
           name: data?.name || "",
           status: data?.status || false,
           roles: data?.roles || [],
+          first_acess: data?.first_acess || false,
+          photo: data?.photo || null,
         }}
         isEditMode={true}
         isRegister={true}

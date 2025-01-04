@@ -94,14 +94,17 @@ export const updateProduct = async ({
   id: number | undefined;
   data: AddProductType;
 }) => {
-  console.log(data);
   try {
-    const response = await api.put(`/products/${id}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.put(
+      `/products/${id}`,
+      { ...data, photo: data.photo ? data.photo : new File([], "") },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

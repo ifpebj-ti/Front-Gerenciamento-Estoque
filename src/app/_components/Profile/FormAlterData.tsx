@@ -50,11 +50,9 @@ const FormAlterData = ({ children, isEditMode, data, isRegister }: Props) => {
             email: value.email,
             status: true,
             password: "12345678",
-            roles: [
-              {
-                id: 2,
-              },
-            ],
+            first_acess: true,
+            photo: imageSelected,
+            roles: [2],
           },
         };
 

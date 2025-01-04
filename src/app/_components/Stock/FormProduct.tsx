@@ -84,7 +84,7 @@ const FormProduct = ({
   const categoriesRegistered = useGetCategories(session?.accessToken as string);
   const [isFormInitialized, setIsFormInitialized] = useState(false);
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    if (imageSelected === null && selectedProduct.image === "") {
+    if (!isEdit && imageSelected === null && selectedProduct.image === "") {
       alert("Selecione uma imagem");
     }
     //console.log(data, imageSelected);

@@ -26,10 +26,10 @@ export const addUser = async ({
   data: UserRegisterType;
 }) => {
   try {
-    console.log(data);
     const response = await api.post("/users", data, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;

@@ -10,7 +10,9 @@ export interface UserInfoType {
   name: string;
   email: string;
   status: boolean;
-  roles: { id: string; authority: string }[];
+  first_acess: boolean;
+  photo: string | null;
+  roles: number[];
 }
 
 export interface UserRegisterType {
@@ -18,5 +20,7 @@ export interface UserRegisterType {
   email: string;
   password: string;
   status: boolean;
-  roles: { id: number }[];
+  first_acess: boolean;
+  photo: File | null;
+  roles: number[];
 }
