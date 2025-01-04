@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import WindowConfirm from "../WindowConfirm/WindowConfirm";
 import WindowLoad from "../WindowLoad/WindowLoad";
 import WindowSuccess from "../WindowSuccess/WindowSuccess";
+import WindowError from "../WindowError/WindowError";
 
 type Props = {
   children: React.ReactNode;
@@ -55,9 +56,20 @@ const FormAlterData = ({
       roles: [2],
     },
   });
+  const [showWindowError, setShowWindowError] = useState({
+    message: "",
+    show: false,
+  });
   // Define `onSubmit` com o tipo `SubmitHandler<FormData>`
   const addUser = useAddUser();
   const onSubmit: SubmitHandler<FormDataAlterDataType> = (value) => {
+    if (imageSelected == null) {
+      setShowWindowError({
+        message: "Selecione uma foto para o perfil",
+        show: true,
+      });
+      return;
+    }
     if (
       value.name === data.name &&
       data.email === value.email &&
@@ -109,6 +121,12 @@ const FormAlterData = ({
   };
   return (
     <>
+      {showWindowError.show && (
+        <WindowError
+          sendClose={() => setShowWindowError({ show: false, message: "" })}
+          text={showWindowError.message}
+        ></WindowError>
+      )}
       {showWindowSuccess && (
         <WindowSuccess
           sendClose={() => {
@@ -132,6 +150,17 @@ const FormAlterData = ({
                 setLoading(false);
                 setShowWindow(false);
                 setShowWindowSuccess(true);
+              },
+              /* eslint-disable-next-line */
+              onError: (error: any) => {
+                setLoading(false);
+                setShowWindow(false);
+                setShowWindowError({
+                  message:
+                    error.message ||
+                    "Error inesperado ao adicionar ou editar usuário",
+                  show: true,
+                });
               },
             });
           }}
