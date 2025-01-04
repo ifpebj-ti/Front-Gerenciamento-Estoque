@@ -1,14 +1,14 @@
 "use client";
 type Props = {
   title: string;
-  message: string;
+  message?: string;
   sendClose: () => void;
   confirm: () => void;
 };
 const WindowConfirm = ({ title, message, sendClose, confirm }: Props) => {
   return (
-    <div className="bg-black/50 fixed w-full h-full z-40 flex justify-center items-center">
-      <div className="mx-4 sm:mx-0 p-4 sm:p-8 justify-center items-center  bg-white flex flex-col gap-5 sm:gap-8 rounded-lg">
+    <div className="bg-black/50 fixed w-screen h-full z-40 top-0 right-0 flex justify-center items-center">
+      <div className="mx-4 sm:mx-0 p-4 sm:p-8 justify-center items-center  bg-white flex flex-col gap-5 sm:gap-4 rounded-lg">
         <h1 className="font-bold text-lg sm:text-xl">
           {title ? title : "Tem certeza?"}
         </h1>
