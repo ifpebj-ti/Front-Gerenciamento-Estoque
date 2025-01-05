@@ -63,7 +63,7 @@ const FormAlterData = ({
   // Define `onSubmit` com o tipo `SubmitHandler<FormData>`
   const addUser = useAddUser();
   const onSubmit: SubmitHandler<FormDataAlterDataType> = (value) => {
-    if (imageSelected == null) {
+    if (!isEditMode && imageSelected == null) {
       setShowWindowError({
         message: "Selecione uma foto para o perfil",
         show: true,
@@ -141,8 +141,12 @@ const FormAlterData = ({
       {loading && <WindowLoad></WindowLoad>}
       {showWindow && (
         <WindowConfirm
-          title="Adicionar novo usuário"
-          message="Tem certeza que deseja adicionar um novo usuário?"
+          title={`${isEditMode ? "Editar usuário" : "Adicionar novo usuário"}`}
+          message={`${
+            isEditMode
+              ? "Tem certeza que deseja editar esse usuário?"
+              : "Tem certeza que deseja adicionar um novo usuário?"
+          }`}
           sendClose={() => {
             setLoading(true);
             addUser.mutate(userData, {
@@ -201,11 +205,12 @@ const FormAlterData = ({
         >
           {isEditMode && (
             <>
-              {/* <div className="absolute w-full h-full hover:bg-black/25 rounded-full cursor-pointer opacity-0 hover:opacity-100 flex justify-center items-center text-white font-bold">
-              {data?.avatar !== ""
-                ? "Mudar foto do perfil"
-                : "Adicionar foto no perfil"}
-            </div> */}
+              <div className="absolute w-full h-full hover:bg-black/25 rounded-full cursor-pointer opacity-0 hover:opacity-100 flex justify-center items-center text-white font-bold">
+                {data?.photo
+                  ? "Mudar foto do perfil"
+                  : "Adicionar foto no perfil"}
+              </div>
+
               <svg
                 className="absolute bottom-0 right-0 -translate-x-1/2 -translate-y-1/2"
                 width="46"

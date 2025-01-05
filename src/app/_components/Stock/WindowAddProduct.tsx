@@ -3,15 +3,16 @@ import FormProduct from "./FormProduct";
 
 type Props = {
   sendClose: () => void;
+  refetchProducts: () => void;
 };
 
-const WindowAddProduct = ({ sendClose }: Props) => {
+const WindowAddProduct = ({ sendClose, refetchProducts }: Props) => {
   return (
     <div className="  bg-white text-center sm:text-start py-4 sm:py-16 px-8 w-full rounded-lg ">
       <h1 className="uppercase font-bold text-lg sm:text-2xl mb-4">
         Dados do produto
       </h1>
-      <FormProduct sendClose={sendClose}>
+      <FormProduct refetchProducts={refetchProducts} sendClose={sendClose}>
         <button
           onClick={(e) => {
             e.preventDefault();

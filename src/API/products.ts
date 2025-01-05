@@ -57,9 +57,26 @@ export const addPost = async ({
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return null;
+      if (error.response?.status === 413) {
+        throw {
+          message:
+            error.response?.data?.message || "Imagem excede o limite de 1MB",
+          status: error.response?.status,
+          data: error.response?.data,
+          originalError: error, // Inclui o erro original do Axios
+        };
+      } else {
+        throw {
+          message:
+            error.response?.data?.message ||
+            "Erro ao adicionar ou editar produto",
+          status: error.response?.status,
+          data: error.response?.data,
+          originalError: error, // Inclui o erro original do Axios
+        };
+      }
     }
-    throw error;
+    throw error; // Lança outros tipos de erros
   }
 };
 

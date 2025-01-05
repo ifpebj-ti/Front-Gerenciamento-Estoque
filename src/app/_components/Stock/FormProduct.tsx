@@ -19,6 +19,8 @@ import { useGetCategories } from "@/queries/CategoriesQueries";
 import { CategoriesType } from "@/types/productType";
 import { useGetProduct } from "@/queries/ProductsQueries";
 import base64ToBlob from "@/utils/convertImage";
+import WindowConfirm from "../WindowConfirm/WindowConfirm";
+import WindowError from "../WindowError/WindowError";
 
 type FormData = z.infer<typeof SchemaProduct>;
 type Props = {
@@ -80,18 +82,43 @@ const FormProduct = ({
   const [imageSelected, setImageSelected] = useState<File | null>(null);
   const [showWindowNewCategory, setShowWindowNewCategory] = useState(false);
   const [showWindowSuccess, setShowWindowSuccess] = useState(false);
+  const [showWindowLoad, setShowWindowLoad] = useState(false);
+  const [showWindowConfirm, setShowWindowConfirm] = useState(false);
+  const [showWindowError, setShowWindowError] = useState({
+    message: "",
+    show: false,
+  });
+  const [productToSend, setProductToSend] = useState<{
+    id: number;
+    token: string;
+    data: AddProductType;
+  }>({
+    id: 0,
+    token: "",
+    data: {
+      name: "",
+      unit_value: 0,
+      quantity: 0,
+      critical_quantity: 0,
+      description: "",
+      categories: [],
+      photo: null,
+    },
+  });
   const price = watch("unit_price");
   const categoriesRegistered = useGetCategories(session?.accessToken as string);
   const [isFormInitialized, setIsFormInitialized] = useState(false);
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (!isEdit && imageSelected === null && selectedProduct.image === "") {
-      alert("Selecione uma imagem");
+      setShowWindowError({
+        message: "Selecione uma foto para o produto",
+        show: true,
+      });
+      return;
     }
     //console.log(data, imageSelected);
     // Disable when using a mutation
-    console.log(imageSelected);
-    console.log(idProduct);
-    console.log(data);
+
     const sendData: {
       id: number;
       token: string;
@@ -122,11 +149,8 @@ const FormProduct = ({
         });
       }
     } else {
-      addProduct.mutate(sendData, {
-        onSuccess: () => {
-          setShowWindowSuccess(true);
-        },
-      });
+      setProductToSend(sendData);
+      setShowWindowConfirm(true);
     }
   };
 
@@ -221,6 +245,43 @@ const FormProduct = ({
 
   return (
     <>
+      {showWindowError.show && (
+        <WindowError
+          text={`${showWindowError.message}`}
+          sendClose={() => setShowWindowError({ message: "", show: false })}
+        ></WindowError>
+      )}
+      {showWindowLoad && <WindowLoad></WindowLoad>}
+      {showWindowConfirm && (
+        <WindowConfirm
+          confirm={() => {
+            setShowWindowLoad(true);
+            addProduct.mutate(productToSend, {
+              onSuccess: () => {
+                setShowWindowLoad(false);
+                setShowWindowSuccess(true);
+                if (refetchProducts) {
+                  refetchProducts();
+                }
+              },
+              onError: () => {
+                setShowWindowLoad(false);
+                setShowWindowError({
+                  message: "Erro ao adicionar produto",
+                  show: true,
+                });
+              },
+            });
+          }}
+          sendClose={() => setShowWindowConfirm(false)}
+          title={`${isEdit ? "Editar Produto" : "Adicionar Produto"}`}
+          message={`${
+            isEdit
+              ? "Deseja realmente editar o produto?"
+              : "Deseja realmente adicionar o produto?"
+          }`}
+        ></WindowConfirm>
+      )}
       {showWindowSuccess && (
         <WindowSuccess
           text="Produto cadastrado com sucesso!"

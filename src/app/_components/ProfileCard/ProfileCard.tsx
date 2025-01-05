@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import iconAvatar from "./../../../../public/assets/imgs/avatar.svg";
 import iconDownOrUp from "./../../../../public/assets/icons/icon-down-or-up-card-profile.svg";
 import { useEffect, useState } from "react";
 import Link from "next/link";

@@ -4,10 +4,9 @@ import { UserInfoType } from "@/types/userType";
 type Props = {
   sendClose: () => void;
   data?: UserInfoType | null;
-  isEditMode?: boolean;
 };
 
-const WindowAddNewUser = ({ sendClose, data, isEditMode }: Props) => {
+const WindowAddNewUser = ({ sendClose, data }: Props) => {
   return (
     <>
       <main className="shadow-lg max-w-[1100px] gap-8  w-full  px-8 py-16 flex flex-col justify-center items-center md:items-start mx-auto mt-8 mb-20 bg-white rounded-lg">
@@ -41,7 +40,7 @@ const WindowAddNewUser = ({ sendClose, data, isEditMode }: Props) => {
             type="submit"
             className=" uppercase border-[var(--color-primary)] border-2  text-[var(--color-primary)] px-4 py-2 rounded-md flex-1 hover:bg-[var(--color-primary)] hover:text-white transition-all ease-in-out duration-200"
           >
-            {isEditMode ? "Salvar" : "Adicionar"}
+            Salvar
           </button>
         </FormAlterData>
       </main>
