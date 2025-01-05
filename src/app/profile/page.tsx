@@ -4,8 +4,10 @@ import Header from "../_components/Header/Header";
 import FormAlterData from "../_components/Profile/FormAlterData";
 import FormAlterPass from "../_components/Profile/FormAlterPass";
 import { UserInfoType } from "@/types/userType";
+import { useSession } from "next-auth/react";
 
 const Profile = () => {
+  const { data: session } = useSession();
   const [isEditMode, setIsEditMode] = useState(false);
   const [alterSession, setAlterSession] = useState(0);
   const [infoUser, setInfoUser] = useState<UserInfoType>();
@@ -13,18 +15,18 @@ const Profile = () => {
   useEffect(() => {
     (() => {
       setInfoUser({
-        id: 1,
+        id: session?.userInfo.id as number,
         // avatar:
         //   "https://images-americanas.b2w.io/produtos/3312202621/imagens/boneco-eufrazino-looney-tunes-10cm-nj-croce/3312202621_1_xlarge.jpg",
-        name: "João Almeida e Silva",
-        email: "joao@example.com",
-        first_acess: true,
+        name: session?.userInfo.name as string,
+        email: session?.userInfo.email as string,
+        first_acess: session?.userInfo.first_acess as boolean,
         roles: [{ id: 1, authority: "ROLE_USER" }],
-        photo: null,
-        status: true,
+        photo: session?.userInfo.photo as string,
+        status: session?.userInfo.status as boolean,
       });
     })();
-  }, []);
+  }, [session?.userInfo]);
 
   const renderSession = () => {
     switch (alterSession) {
@@ -63,7 +65,7 @@ const Profile = () => {
       case 1:
         return (
           <FormAlterPass
-            imageProfile={"https://place.ico"}
+            imageProfile={`${session?.userInfo.photo}` || ""}
             isEditMode={isEditMode}
           >
             <button

@@ -33,7 +33,11 @@ const FormAlterPass = ({ children, isEditMode, imageProfile }: Props) => {
     >
       <div
         style={{
-          backgroundImage: `url(${imageProfile})`,
+          backgroundImage: `url(${
+            imageProfile !== ""
+              ? "data:image/png;base64," + imageProfile
+              : "https://placehold.co/640x480"
+          })`,
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}

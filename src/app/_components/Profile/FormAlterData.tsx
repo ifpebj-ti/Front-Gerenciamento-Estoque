@@ -189,7 +189,11 @@ const FormAlterData = ({
             }
           }}
           style={{
-            backgroundImage: `url(https://placehold.co/600x400)`,
+            backgroundImage: `url(${
+              data?.photo
+                ? "data:image/png;base64," + data?.photo
+                : "https://placehold.co/640x480"
+            })`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}

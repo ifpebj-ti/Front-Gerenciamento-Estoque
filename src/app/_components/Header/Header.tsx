@@ -149,7 +149,7 @@ const Header = () => {
           <ProfileCard
             data={{
               name: `${session?.userInfo.name || ""}`,
-              avatar: "",
+              avatar: `${session?.userInfo.photo || ""}`,
               email: `${session?.userInfo.email || ""}`,
             }}
           ></ProfileCard>

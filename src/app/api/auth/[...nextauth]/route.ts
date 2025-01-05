@@ -19,6 +19,8 @@ interface User {
   username: string;
   email: string;
   status: boolean;
+  photo: string;
+  first_acess: boolean;
   roles: { id: string; authority: string }[];
 }
 
@@ -27,6 +29,8 @@ interface UserInfo {
   name: string;
   email: string;
   status: boolean;
+  photo: string;
+  first_acess: boolean;
   roles: { id: string; authority: string }[];
 }
 
@@ -91,6 +95,8 @@ const handler = NextAuth({
             email: userInfo.email,
             status: userInfo.status,
             roles: userInfo.roles,
+            photo: userInfo.photo,
+            first_acess: userInfo.first_acess,
           };
         } catch (e) {
           console.error("Erro na autenticação:", e);
