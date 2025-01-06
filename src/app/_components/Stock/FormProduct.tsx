@@ -138,16 +138,8 @@ const FormProduct = ({
     };
     if (isEdit) {
       sendData.id = idProduct as number;
-      if (sendData.id) {
-        editProduct.mutate(sendData, {
-          onSuccess: () => {
-            if (refetchProducts) {
-              refetchProducts();
-              setShowWindowSuccess(true);
-            }
-          },
-        });
-      }
+      setProductToSend(sendData);
+      setShowWindowConfirm(true);
     } else {
       setProductToSend(sendData);
       setShowWindowConfirm(true);
@@ -255,6 +247,25 @@ const FormProduct = ({
       {showWindowConfirm && (
         <WindowConfirm
           confirm={() => {
+            if (isEdit) {
+              editProduct.mutate(productToSend, {
+                onSuccess: () => {
+                  if (refetchProducts) {
+                    refetchProducts();
+                    setShowWindowSuccess(true);
+                  }
+                },
+                onError: () => {
+                  setShowWindowLoad(false);
+                  setShowWindowError({
+                    message: "Erro ao editar produto",
+                    show: true,
+                  });
+                },
+              });
+
+              return;
+            }
             setShowWindowLoad(true);
             addProduct.mutate(productToSend, {
               onSuccess: () => {
@@ -284,7 +295,11 @@ const FormProduct = ({
       )}
       {showWindowSuccess && (
         <WindowSuccess
-          text="Produto cadastrado com sucesso!"
+          text={`${
+            isEdit
+              ? "Produto editado com sucesso!"
+              : "Produto adicionado com sucesso!"
+          }`}
           sendClose={() => {
             setShowWindowSuccess(false);
             sendClose();

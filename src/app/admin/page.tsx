@@ -150,7 +150,10 @@ const Admin = () => {
           <div className="w-full  min-h-screen  bg-black/75 flex justify-center items-center fixed z-40 px-8"></div>
           <div className="absolute z-40 w-full flex justify-center items-center p-8">
             <WindowEditProduct
-              refetchProducts={products.refetch}
+              refetchProducts={() => {
+                products.refetch();
+                renderSession();
+              }}
               id={productSelectToEdit}
               sendClose={() => {
                 setShowWindowEditProduct(!showWindowEditProduct);

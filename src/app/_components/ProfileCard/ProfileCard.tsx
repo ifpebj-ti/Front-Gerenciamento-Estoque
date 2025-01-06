@@ -16,7 +16,6 @@ const ProfileCard = ({ data }: Props) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setWidthScreen(window.innerWidth);
-      console.log(data.avatar);
     }
   }, [data]);
 
