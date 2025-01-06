@@ -24,3 +24,9 @@ export interface UserRegisterType {
   photo: File | null;
   roles: number[];
 }
+
+export interface UserUpdateType {
+  email: string;
+  password: string;
+  photo: File | null;
+}

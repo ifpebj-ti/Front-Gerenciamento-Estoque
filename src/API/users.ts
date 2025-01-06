@@ -1,6 +1,6 @@
 import axios from "axios";
 import { api } from "./base";
-import { UserRegisterType } from "@/types/userType";
+import { UserRegisterType, UserUpdateType } from "@/types/userType";
 
 export const getUsers = async (token: string) => {
   try {
@@ -53,6 +53,79 @@ export const addUser = async ({
           originalError: error, // Inclui o erro original do Axios
         };
       }
+    }
+    throw error; // Lança outros tipos de erros
+  }
+};
+
+export const updateUser = async ({
+  token,
+  email,
+  data,
+}: {
+  token: string;
+  email: string;
+  data: UserUpdateType;
+}) => {
+  try {
+    const response = await api.put(`/users/updateUser/${email}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 413) {
+        throw {
+          message:
+            error.response?.data?.message || "Imagem excede o limite de 1MB",
+          status: error.response?.status,
+          data: error.response?.data,
+          originalError: error, // Inclui o erro original do Axios
+        };
+      } else {
+        throw {
+          message:
+            error.response?.data?.message ||
+            "Erro ao adicionar ou editar usuário",
+          status: error.response?.status,
+          data: error.response?.data,
+          originalError: error, // Inclui o erro original do Axios
+        };
+      }
+    }
+    throw error; // Lança outros tipos de erros
+  }
+};
+
+export const deactivateUser = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: number;
+}) => {
+  try {
+    const response = await api.put(
+      `/users/desactive/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw {
+        message: error.response?.data?.message || "Erro ao desativar usuário",
+        status: error.response?.status,
+        data: error.response?.data,
+        originalError: error, // Inclui o erro original do Axios
+      };
     }
     throw error; // Lança outros tipos de erros
   }
