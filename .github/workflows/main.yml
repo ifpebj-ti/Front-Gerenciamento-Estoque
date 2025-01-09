@@ -47,6 +47,7 @@ jobs:
     - name: Run New Container
       run: |
         docker run -d --restart unless-stopped \
+          --network app_network \
           -p 80:3000 \
           -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
           -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
