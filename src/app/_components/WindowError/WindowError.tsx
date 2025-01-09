@@ -23,7 +23,7 @@ const WindowError = ({ text, sendClose }: Props) => {
 
   return (
     <div className="flex justify-center items-center fixed w-full h-full z-50 bg-black/50 top-0 right-0">
-      <div className="flex justify-center items-center flex-col bg-white px-8 py-4 rounded-lg">
+      <div className="flex justify-center items-center flex-col bg-white px-8 py-4 rounded-lg max-w-96">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -39,7 +39,7 @@ const WindowError = ({ text, sendClose }: Props) => {
           />
         </svg>
 
-        <p className="text-red-600 font-bold">{text}</p>
+        <p className="text-red-600 font-bold text-center">{text}</p>
       </div>
     </div>
   );

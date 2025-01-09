@@ -20,6 +20,7 @@ type Props = {
   data: UserInfoType;
   isRegister: boolean;
   sendClose?: () => void;
+  isRefetch?: () => void;
 };
 const FormAlterData = ({
   children,
@@ -27,6 +28,7 @@ const FormAlterData = ({
   data,
   isRegister,
   sendClose,
+  isRefetch,
 }: Props) => {
   const { data: session } = useSession();
   const {
@@ -50,7 +52,7 @@ const FormAlterData = ({
       name: "",
       email: "",
       status: true,
-      password: "12345678",
+      password: "T2b95*R8",
       first_acess: true,
       photo: null,
       roles: [2],
@@ -88,7 +90,7 @@ const FormAlterData = ({
             name: value.name,
             email: value.email,
             status: true,
-            password: "12345678",
+            password: "T2b95*R8",
             first_acess: true,
             photo: imageSelected,
             roles: [2],
@@ -97,10 +99,10 @@ const FormAlterData = ({
         setUserData(sendData);
         setShowWindow(true);
       } else {
-        // Edita
+        alert("edit");
       }
-    } else {
     }
+
     // Lógica para envio do formulário
   };
   useEffect(() => {
@@ -135,25 +137,38 @@ const FormAlterData = ({
               sendClose();
             }
           }}
-          text="Usuário adicionado com sucesso!"
+          text={`${
+            isRegister
+              ? "Usuário cadastrado com sucesso!"
+              : "Usuário editado com sucesso!"
+          }`}
         ></WindowSuccess>
       )}
       {loading && <WindowLoad></WindowLoad>}
       {showWindow && (
         <WindowConfirm
-          title={`${isEditMode ? "Editar usuário" : "Adicionar novo usuário"}`}
+          title={`${!isRegister ? "Editar usuário" : "Adicionar novo usuário"}`}
           message={`${
-            isEditMode
+            !isRegister
               ? "Tem certeza que deseja editar esse usuário?"
               : "Tem certeza que deseja adicionar um novo usuário?"
           }`}
           sendClose={() => {
+            setShowWindow(false);
+          }}
+          confirm={() => {
             setLoading(true);
+            if (isEditMode && !isRegister) {
+              return null;
+            }
             addUser.mutate(userData, {
               onSuccess: () => {
                 setLoading(false);
                 setShowWindow(false);
                 setShowWindowSuccess(true);
+                if (isRefetch) {
+                  isRefetch();
+                }
               },
               /* eslint-disable-next-line */
               onError: (error: any) => {
@@ -168,7 +183,6 @@ const FormAlterData = ({
               },
             });
           }}
-          confirm={() => {}}
         ></WindowConfirm>
       )}
 

@@ -1,4 +1,4 @@
-import { addUser, deactivateUser, updateUser } from "@/API/users";
+import { activateUser, addUser, deactivateUser, updateUser } from "@/API/users";
 import { useMutation } from "@tanstack/react-query";
 
 export const useAddUser = () => {
@@ -18,6 +18,13 @@ export const useUpdateUser = () => {
 export const useDeactivateUser = () => {
   const mutation = useMutation({
     mutationFn: deactivateUser,
+  });
+  return mutation;
+};
+
+export const useActivateUser = () => {
+  const mutation = useMutation({
+    mutationFn: activateUser,
   });
   return mutation;
 };

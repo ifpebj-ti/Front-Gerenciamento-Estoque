@@ -26,7 +26,6 @@ export interface UserRegisterType {
 }
 
 export interface UserUpdateType {
-  email: string;
   password: string;
   photo: File | null;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeactivateUser } from "@/mutations/UserMutations";
+import { useActivateUser, useDeactivateUser } from "@/mutations/UserMutations";
 import { UserInfoType } from "@/types/userType";
 import base64ToBlob from "@/utils/convertImage";
 import WindowConfirm from "../WindowConfirm/WindowConfirm";
@@ -13,8 +13,9 @@ import { useSession } from "next-auth/react";
 type Props = {
   data: UserInfoType;
   sendOpenEditWindow: () => void;
+  isRefetch?: () => void;
 };
-const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
+const CardUserListAdmin = ({ data, sendOpenEditWindow, isRefetch }: Props) => {
   const [showWindowConfirm, setShowWindowConfirm] = useState(false);
   const [showWindowLoad, setShowWindowLoad] = useState(false);
   const [showWindowError, setShowWindowError] = useState({
@@ -24,6 +25,15 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
   const [showWindowSuccess, setShowWindowSuccess] = useState(false);
   const { data: session } = useSession();
   const deactivateUser = useDeactivateUser();
+  const activeUser = useActivateUser();
+
+  const renderStatus = () => {
+    if (data.status === true) {
+      return "Desativar";
+    }
+    return "Ativar";
+  };
+
   return (
     <>
       {showWindowError.show && (
@@ -34,7 +44,11 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
       )}
       {showWindowSuccess && (
         <WindowSuccess
-          text="Usuário desativado com sucesso!"
+          text={`${
+            data.status == true
+              ? "Ativado com sucesso"
+              : "Desativado com sucesso"
+          }`}
           sendClose={() => setShowWindowSuccess(false)}
         ></WindowSuccess>
       )}
@@ -43,7 +57,34 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
         <WindowConfirm
           confirm={() => {
             setShowWindowLoad(true);
-            deactivateUser.mutate(
+            if (data.status === true) {
+              deactivateUser.mutate(
+                {
+                  token: session?.accessToken as string,
+                  id: data.id,
+                },
+                {
+                  onSuccess: () => {
+                    setShowWindowLoad(false);
+                    setShowWindowSuccess(true);
+                    if (isRefetch) {
+                      isRefetch();
+                    }
+                  },
+                  onError: (error) => {
+                    setShowWindowLoad(false);
+                    setShowWindowError({
+                      show: true,
+                      message: error.message,
+                    });
+                  },
+                }
+              );
+              setShowWindowConfirm(false);
+
+              return;
+            }
+            activeUser.mutate(
               {
                 token: session?.accessToken as string,
                 id: data.id,
@@ -52,6 +93,9 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
                 onSuccess: () => {
                   setShowWindowLoad(false);
                   setShowWindowSuccess(true);
+                  if (isRefetch) {
+                    isRefetch();
+                  }
                 },
                 onError: (error) => {
                   setShowWindowLoad(false);
@@ -62,9 +106,17 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
                 },
               }
             );
+
+            setShowWindowConfirm(false);
           }}
-          title="Desativar Usuário"
-          message="Tem certeza que deseja desativar esse usuário?"
+          title={`${
+            data.status === true ? "Desativar Usuário " : "Ativar Usuário"
+          }`}
+          message={`${
+            data.status === true
+              ? "Tem certeza que deseja desativar esse usuário?"
+              : "Tem certeza que deseja ativar esse usuário?"
+          }`}
           sendClose={() => setShowWindowConfirm(false)}
         ></WindowConfirm>
       )}
@@ -116,7 +168,7 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow }: Props) => {
                 : "text-red-700 border-red-700 hover:bg-red-700"
             }  hover:text-white transition-all ease-in-out duration-200 uppercase  border-2 px-8 backgroundLoginPoint:px-16 py-1 rounded-lg`}
           >
-            {data.status ? "desativar" : "ativar"}
+            {renderStatus()}
           </button>
         </div>
       </div>

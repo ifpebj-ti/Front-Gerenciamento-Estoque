@@ -37,7 +37,7 @@ const Admin = () => {
     category: filters.category,
   });
   const users = useGetUsers(session?.accessToken as string);
-
+  const [userAction, setUserAction] = useState<"add" | "edit">("add");
   // Resetar a página ao mudar os filtros
   // useEffect(() => {
   //   setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
@@ -85,6 +85,7 @@ const Admin = () => {
           <>
             <button
               onClick={() => {
+                setUserAction("add");
                 setShowWindowAddNewUser(!showWindowAddNewUser);
               }}
               className="transition-all ease-in-out duration-200 shadow-lg hover:bg-[var(--color-primary)] hover:text-white hover:border-none w-full h-12 text-slate-400 rounded-lg  border-2 border-slate-400  uppercase 
@@ -96,11 +97,16 @@ const Admin = () => {
               users.data.map((user: UserInfoType) => {
                 return (
                   <CardUserListAdmin
+                    isRefetch={() => {
+                      users.refetch();
+                      renderSession();
+                    }}
                     data={user}
                     key={user.id}
                     sendOpenEditWindow={() => {
                       setShowWindowAddNewUser(true);
                       setUserSelected(user);
+                      setUserAction("edit");
                     }}
                   ></CardUserListAdmin>
                 );
@@ -120,6 +126,11 @@ const Admin = () => {
           <div className="w-full  min-h-screen  bg-black/75 flex justify-center items-center fixed z-40 px-8"></div>
           <div className="absolute z-40 w-full flex justify-center items-center p-8">
             <WindowAddNewUser
+              isRefetch={() => {
+                users.refetch();
+                renderSession();
+              }}
+              isAddUser={userAction === "add" ? true : false}
               data={userSelected}
               sendClose={() => {
                 setShowWindowAddNewUser(!showWindowAddNewUser);

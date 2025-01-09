@@ -18,6 +18,24 @@ export const getUsers = async (token: string) => {
   }
 };
 
+export const getUser = async (token: string) => {
+  try {
+    const response = await api.get(`/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw {
+        message: error.response?.data?.message || "Erro ao buscar usuário",
+      };
+    }
+    throw error;
+  }
+};
+
 export const addUser = async ({
   token,
   data,
@@ -68,12 +86,16 @@ export const updateUser = async ({
   data: UserUpdateType;
 }) => {
   try {
-    const response = await api.put(`/users/updateUser/${email}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.put(
+      `/users/updateUser/${email}`,
+      { ...data, photo: data.photo ? data.photo : new File([], "") },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -125,6 +147,34 @@ export const deactivateUser = async ({
         status: error.response?.status,
         data: error.response?.data,
         originalError: error, // Inclui o erro original do Axios
+      };
+    }
+    throw error; // Lança outros tipos de erros
+  }
+};
+
+export const activateUser = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: number;
+}) => {
+  try {
+    const response = await api.put(
+      `/users/active/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw {
+        message: error.response?.data?.message || "Erro ao ativar usuário",
       };
     }
     throw error; // Lança outros tipos de erros
