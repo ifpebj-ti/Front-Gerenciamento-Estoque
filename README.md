@@ -88,7 +88,7 @@ Attention: If you have used the command "nano", don't forget the press ctrl+o fo
   npm i
 ```
 
-- Para colocar o projeto para funcionar utilize o seguinte comando:
+- To running project used following command:
 
 ```bash
   npm run dev
