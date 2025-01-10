@@ -125,4 +125,4 @@ Figma link: [Click here to access!](https://google.com.br)
 
 ## Deploy
 
-[Project's link](https://137.131.180.24/)
+[Project's link](http://137.131.180.24/login?callbackUrl=%2F)
