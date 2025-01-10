@@ -72,7 +72,7 @@ git clone https://github.com/ifpebj-ti/Front-Gerenciamento-Estoque.git
 - Content for the file .env.local
 
 ```bash
-# Caso o seu back end esteja rodando na mesma porta (3333) basta copiar e colar:
+# Copy and Past the following content in file .env.local, Don't forget to modify the variable's values:
 
   NEXTAUTH_SECRET="You may generate any hash code"
   NEXTAUTH_URL="URL that your Web application is running"
