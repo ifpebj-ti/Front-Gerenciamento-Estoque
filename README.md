@@ -104,7 +104,7 @@ Attention: If you have used the command "nano", don't forget the press ctrl+o fo
   npm run test
 ```
 
-## Delopment
+## Development
 
 This project was development using some libraries, how:
 
