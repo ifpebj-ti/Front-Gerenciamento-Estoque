@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Inventory Manager
 
-## Getting Started
+This project is a system for managing product stocks. Here is the project's front-end, developed using JavaScript and Next.js.
 
-First, run the development server:
+## Índice
+
+- [Installation](#installation)
+- [Technologies](#Technologies)
+- [Use](#use)
+- [Tests](#tests)
+- [Development](#development)
+- [Images](#images)
+- [Prototype](#prototype)
+- [Deploy](#deploy)
+
+## Technologies
+
+- **Next.js:** Framework React for develop the Web application.
+- **Typescript:** TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.
+
+## installation
+
+Follow the instruction below:
+
+- Download and install node and npm in this site: [Link for site](https://nodejs.org/en/download)
+
+For to check if the installation of node and npm was success:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+  # Command for to check if the node is installed
+  node --version
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+  # Command for to check if the npm is installed
+  npm --version
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
 
-## Learn More
+- Clone the project
 
-To learn more about Next.js, take a look at the following resources:
+```bash
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Clone the repository by SSH
+git clone git@github.com:ifpebj-ti/Front-Gerenciamento-Estoque.git
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+# Clone the repository by HTTPS
+git clone https://github.com/ifpebj-ti/Front-Gerenciamento-Estoque.git
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Access project's directory:
+
+```bash
+
+  cd Front-Gerencimento-Estoque
+
+```
+
+- You need create the .env.local file, this file will have the API URL and the Next Auth configurations
+
+```bash
+# In Linux you can use the command "nano"
+
+  nano .env.local
+
+```
+
+- Content for the file .env.local
+
+```bash
+# Caso o seu back end esteja rodando na mesma porta (3333) basta copiar e colar:
+
+  NEXTAUTH_SECRET="You may generate any hash code"
+  NEXTAUTH_URL="URL that your Web application is running"
+  API_URL="URL that your API is running"
+
+```
+
+Attention: If you have used the command "nano", don't forget the press ctrl+o for save this file, and ctrl+x to close the file in terminal.
+
+- Insider the root project's directory, open the terminal and paste following command:
+
+```bash
+  npm i
+```
+
+- Para colocar o projeto para funcionar utilize o seguinte comando:
+
+```bash
+  npm run dev
+```
+
+## Use
+
+- Access the link that showed in the terminal
+
+## Tests
+
+```bash
+  npm run test
+```
+
+## Delopment
+
+This project was development using some libraries, how:
+
+- React Hook Form
+- Tanstack Query
+- Next Auth
+
+## Images
+
+![Login](./public/assets/Images_Readme/Login.png)
+![Home](./public/assets/Images_Readme/Home.png)
+![Stock](./public/assets/Images_Readme/Stock.png)
+![Admin](./public/assets/Images_Readme/Admin.png)
+
+## Prototype
+
+Figma link: [Click here to access!](https://google.com.br)
+
+## Deploy
+
+[Project's link](https://137.131.180.24/)
