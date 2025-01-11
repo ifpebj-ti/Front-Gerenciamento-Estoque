@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import iconAvatar from "./../../../../public/assets/imgs/avatar.svg";
 import iconDownOrUp from "./../../../../public/assets/icons/icon-down-or-up-card-profile.svg";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+
 type Props = {
   data: {
     name: string;
@@ -17,7 +17,7 @@ const ProfileCard = ({ data }: Props) => {
     if (typeof window !== "undefined") {
       setWidthScreen(window.innerWidth);
     }
-  }, []);
+  }, [data]);
 
   const openProfileMenu = () => {
     const profile = document.getElementById("profile-card") as HTMLDivElement;
@@ -56,12 +56,18 @@ const ProfileCard = ({ data }: Props) => {
         }
       }}
       id="profile-card"
-      className="flex rounded-full hover:rounded-b-none  sm:rounded-md bg-white p-2 sm:p-0 sm:w-48 sm:h-12 justify-center items-center gap-2 cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 relative"
+      className="z-20 flex rounded-full hover:rounded-b-none  sm:rounded-md bg-white p-2 sm:p-0 sm:w-48 sm:h-12 justify-center items-center gap-2 cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 relative"
     >
       <Image
-        className="object-cover bg-slate-400 rounded-full w-9 h-9] text-sm"
-        src={iconAvatar}
+        className="object-cover bg-slate-400 rounded-full w-9 h-9 text-sm"
+        src={`${
+          data.avatar !== ""
+            ? "data:image/png;base64," + data.avatar
+            : "https://placehold.co/600x400"
+        }`}
         alt="foto"
+        width={10}
+        height={10}
       ></Image>
       <span className="hidden sm:block text-[var(--color-primary)] font-extrabold first-letter:uppercase">
         {data.name.length >= 12 ? data.name.slice(0, 12) + "..." : data.name}
@@ -86,7 +92,7 @@ const ProfileCard = ({ data }: Props) => {
           <li className="w-full inline-flex">
             <Link
               className=" p-2  w-full hover:scale-105 transition-all ease-in-out duration-200 hover:font-bold"
-              href="/config"
+              href="/profile"
             >
               Configurações da conta
             </Link>

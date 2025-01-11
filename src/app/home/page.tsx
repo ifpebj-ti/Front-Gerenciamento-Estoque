@@ -2,6 +2,7 @@ import Image from "next/image";
 import Header from "../_components/Header/Header";
 import bgHome from "./../../../public/assets/imgs/bg-banner-home.svg";
 import ButtonLogin from "../_components/AuthForms/ButtonLogin/ButtonLogin";
+import Link from "next/link";
 const MainHome = () => {
   return (
     <>
@@ -32,10 +33,12 @@ const MainHome = () => {
               className="mt-4 sm:mt-11 w-full inline-flex justify-center items-center BannerHomePoint:inline-block"
               id="buttonHomeBackground"
             >
-              <ButtonLogin
-                buttonType="submit"
-                textButton="REALIZE SUA BUSCA"
-              ></ButtonLogin>
+              <Link href={"/stock"}>
+                <ButtonLogin
+                  buttonType="submit"
+                  textButton="REALIZE SUA BUSCA"
+                ></ButtonLogin>
+              </Link>
             </div>
           </div>
           <div className="relative BannerHomePoint:flex-1 BannerHomePoint:w-96 BannerHomePoint:h-[30rem] ">

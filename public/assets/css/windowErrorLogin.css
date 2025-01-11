@@ -1,0 +1,33 @@
+@keyframes windowShowAnimationError {
+  0% {
+    top: -10rem;
+    opacity: 0;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+.windowShowAnimationError {
+  animation-name: windowShowAnimationError;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes windowHideAnimationError {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  100% {
+    left: -24rem;
+    opacity: 0;
+  }
+}
+
+.windowHideAnimationError {
+  animation-name: windowHideAnimationError;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
