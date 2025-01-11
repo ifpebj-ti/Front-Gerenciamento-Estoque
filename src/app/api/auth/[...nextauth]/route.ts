@@ -63,7 +63,7 @@ const handler = NextAuth({
           body.append("password", credentials.password);
           body.append("grant_type", "password");
 
-          const response = await fetch("http://localhost:8080/oauth2/token", {
+          const response = await fetch("http://137.131.180.24:8080/oauth2/token", {
             method: "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
