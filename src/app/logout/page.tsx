@@ -7,7 +7,8 @@ import WindowLoad from "../_components/WindowLoad/WindowLoad";
 const Logout = () => {
   useEffect(() => {
     // Chame o signOut e defina o callbackUrl para redirecionar após o logout
-    signOut({ callbackUrl: "/login" });
+    const callbackUrl = `${process.env.NEXT_PUBLIC_URL}/login`; // Use NEXTAUTH_URL do ambiente
+    signOut({ callbackUrl });
   }, []);
 
   return <WindowLoad></WindowLoad>;
