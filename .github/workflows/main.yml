@@ -23,14 +23,6 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
-      - name: Create .env.production
-        run: |
-          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.production
-          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.production
-          echo "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}" >> .env.production
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.API_URL }}" >> .env.production
-          echo "NODE_ENV=production" >> .env.production
-
       - name: Build Application
         run: npm run build:prod
 
@@ -57,5 +49,9 @@ jobs:
           docker run -d --restart unless-stopped \
             --network app_network \
             -p 80:3000 \
-            --env-file .env.production \
+            -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
+            -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
+            -e NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} \
+            -e NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} \
+            -e NODE_ENV=production \
             --name deploy_frontend brazf/estoque-frontend
