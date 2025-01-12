@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--max-http-header-size=12800000' next dev",
-    "build": "next build",
-    "start": "NODE_OPTIONS='--max-http-header-size=12800000' next start",
+    "dev": "cross-env NODE_ENV=development NODE_OPTIONS='--max-http-header-size=12800000' next dev",
+    "build:dev": "cross-env NODE_ENV=development next build",
+    "start:dev": "cross-env NODE_ENV=development NODE_OPTIONS='--max-http-header-size=12800000' next start",
+    "build:prod": "cross-env NODE_ENV=production next build",
+    "start:prod": "cross-env NODE_ENV=production NODE_OPTIONS='--max-http-header-size=12800000' next start",
     "lint": "next lint"
   },
   "dependencies": {
