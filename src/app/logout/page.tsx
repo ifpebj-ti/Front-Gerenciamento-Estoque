@@ -8,7 +8,8 @@ const Logout = () => {
   useEffect(() => {
     // Chame o signOut e defina o callbackUrl para redirecionar após o logout
     const callbackUrl = `${process.env.NEXT_PUBLIC_URL}/login`; // Use NEXTAUTH_URL do ambiente
-    signOut({ callbackUrl: callbackUrl });
+    // signOut({ callbackUrl: callbackUrl });
+    console.log(callbackUrl);
   }, []);
 
   return <WindowLoad></WindowLoad>;
