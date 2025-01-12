@@ -17,6 +17,7 @@
     "axios": "^1.7.9",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
+    "js-cookie": "^3.0.5",
     "next": "14.2.15",
     "next-auth": "^4.24.11",
     "react": "^18",
@@ -25,6 +26,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/next-auth": "^3.13.0",
     "@types/node": "^20",
     "@types/react": "^18",
