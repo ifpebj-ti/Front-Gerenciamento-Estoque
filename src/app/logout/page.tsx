@@ -8,7 +8,9 @@ const Logout = () => {
   useEffect(() => {
     (() => {
       // const callbackUrl = `${process.env.NEXT_PUBLIC_URL}/login`; // Use NEXTAUTH_URL do ambiente
-      return signOut();
+      return signOut({
+        callbackUrl: "http://137.131.180.24:8080/login",
+      });
     })();
   }, []);
 
