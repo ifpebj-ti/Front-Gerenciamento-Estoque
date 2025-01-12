@@ -2,56 +2,60 @@ name: Deploy Application Front OCI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 'lts/*'
-    
-    - name: Install dependencies
-      run: npm install
-  
-    - name: Run Lint
-      run: npm run lint
-  
-    - name: Build Application
-      run: npm run build:prod
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
 
-    - name: Login to Docker Hub
-      run: docker login -u brazf -p ${{secrets.DOCKERHUB_TOKEN}}
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build and Push Docker Image
-      run: |
-        docker build -t brazf/estoque-frontend .
-        docker push brazf/estoque-frontend
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Create .env.production
+        run: |
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.production
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.API_URL }}" >> .env.production
+          echo "NODE_ENV=production" >> .env.production
+
+      - name: Build Application
+        run: npm run build:prod
+
+      - name: Login to Docker Hub
+        run: docker login -u brazf -p ${{secrets.DOCKERHUB_TOKEN}}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t brazf/estoque-frontend .
+          docker push brazf/estoque-frontend
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
-    - name: Pull Docker Image
-      run: docker pull brazf/estoque-frontend:latest
+      - name: Pull Docker Image
+        run: docker pull brazf/estoque-frontend:latest
 
-    - name: Stop Existing Container
-      run: docker rm -f deploy_frontend || true
+      - name: Stop Existing Container
+        run: docker rm -f deploy_frontend || true
 
-    - name: Run New Container
-      run: |
-        docker run -d --restart unless-stopped \
-          --network app_network \
-          -p 80:3000 \
-          -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
-          -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
-          -e NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} \
-          -e NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} \
-          -e NODE_ENV=production \
-          --name deploy_frontend brazf/estoque-frontend
+      - name: Run New Container
+        run: |
+          docker run -d --restart unless-stopped \
+            --network app_network \
+            -p 80:3000 \
+            --env-file .env.production \
+            --name deploy_frontend brazf/estoque-frontend
