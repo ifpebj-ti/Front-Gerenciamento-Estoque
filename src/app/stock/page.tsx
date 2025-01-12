@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../_components/Header/Header";
 import CardProduct from "../_components/Stock/CardProduct";
 import FilterProducts from "../_components/Stock/FilterProducts";
@@ -46,6 +46,9 @@ const Stock = () => {
   //   products.refetch(); // Refaz a requisição quando os filtros mudarem
   // }, [filters, products]);
 
+  useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_API_URL);
+  });
   return (
     <>
       {products.isLoading && <WindowLoad></WindowLoad>}
