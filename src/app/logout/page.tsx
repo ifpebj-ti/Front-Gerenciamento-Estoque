@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+// import { signOut } from "next-auth/react";
 import { useEffect } from "react";
 import WindowLoad from "../_components/WindowLoad/WindowLoad";
 
