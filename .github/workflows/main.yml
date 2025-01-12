@@ -27,7 +27,7 @@ jobs:
         run: npm run build:prod
 
       - name: Login to Docker Hub
-        run: docker login -u brazf -p ${{secrets.DOCKERHUB_TOKEN}}
+        run: docker login -u brazf -p ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push Docker Image
         run: |
@@ -41,6 +41,14 @@ jobs:
       - name: Pull Docker Image
         run: docker pull brazf/estoque-frontend:latest
 
+      - name: Create .env.production
+        run: |
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" > .env.production
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.API_URL }}" >> .env.production
+          echo "NODE_ENV=production" >> .env.production
+
       - name: Stop Existing Container
         run: docker rm -f deploy_frontend || true
 
@@ -49,9 +57,8 @@ jobs:
           docker run -d --restart unless-stopped \
             --network app_network \
             -p 80:3000 \
-            -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
-            -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
-            -e NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} \
-            -e NEXT_PUBLIC_API_URL=http://137.131.180.24:8080 \
-            -e NODE_ENV=production \
+            --env-file .env.production \
             --name deploy_frontend brazf/estoque-frontend
+
+      - name: Cleanup .env.production
+        run: rm .env.production
