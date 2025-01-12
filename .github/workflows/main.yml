@@ -57,8 +57,4 @@ jobs:
           docker run -d --restart unless-stopped \
             --network app_network \
             -p 80:3000 \
-            --env-file .env.production \
             --name deploy_frontend brazf/estoque-frontend
-
-      - name: Cleanup .env.production
-        run: rm .env.production
