@@ -51,6 +51,7 @@ jobs:
           -p 80:3000 \
           -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
           -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
+          -e NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }} \
           -e NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} \
           -e NODE_ENV=production \
           --name deploy_frontend brazf/estoque-frontend

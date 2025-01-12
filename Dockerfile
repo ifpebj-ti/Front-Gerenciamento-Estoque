@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build:prod
 
 FROM node:lts-alpine AS runtime
 WORKDIR /app
@@ -13,4 +13,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV NODE_ENV=production
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:prod"]
