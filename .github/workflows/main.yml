@@ -56,5 +56,5 @@ jobs:
         run: |
           docker run -d --restart unless-stopped \
             --network app_network \
-            -p 80:3000 \
+            -p 3000:3000 \
             --name deploy_frontend brazf/estoque-frontend
