@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardProductListAdmin from "../_components/Admin/CardProductListAdmin";
 import SelectSession from "../_components/Admin/SelectSession";
 import Header from "../_components/Header/Header";
@@ -39,10 +39,10 @@ const Admin = () => {
   const users = useGetUsers(session?.accessToken as string);
   const [userAction, setUserAction] = useState<"add" | "edit">("add");
   // Resetar a página ao mudar os filtros
-  // useEffect(() => {
-  //   setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
-  //   products.refetch(); // Refaz a requisição quando os filtros mudarem
-  // }, [filters, products]);
+  useEffect(() => {
+    setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
+    products.refetch(); // Refaz a requisição quando os filtros mudarem
+  }, [filters, products]);
   const renderSession = () => {
     switch (currentSession) {
       case 0:
@@ -181,15 +181,17 @@ const Admin = () => {
           }}
           options={OPTIONS}
         ></SelectSession>
-        <FilterProducts
-          isUser={currentSession === 1 ? true : false}
-          sendCategory={(category: number | null) => {
-            setFilters({ category: category });
-          }}
-          sendName={(name: string) => {
-            setSearchByName(name);
-          }}
-        ></FilterProducts>
+        {currentSession === 0 && (
+          <FilterProducts
+            sendCategory={(category: number | null) => {
+              setFilters({ category: category });
+            }}
+            sendName={(name: string) => {
+              setSearchByName(name);
+            }}
+          ></FilterProducts>
+        )}
+
         <section className="flex flex-col gap-2 mt-4 relative">
           {renderSession()}
         </section>

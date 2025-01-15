@@ -41,14 +41,11 @@ const Stock = () => {
   });
 
   // Resetar a página ao mudar os filtros
-  // useEffect(() => {
-  //   setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
-  //   products.refetch(); // Refaz a requisição quando os filtros mudarem
-  // }, [filters, products]);
-
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_API_URL);
-  });
+    setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
+    products.refetch(); // Refaz a requisição quando os filtros mudarem
+  }, [filters, products]);
+
   return (
     <>
       {products.isLoading && <WindowLoad></WindowLoad>}
