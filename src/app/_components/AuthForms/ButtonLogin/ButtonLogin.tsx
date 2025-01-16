@@ -1,10 +1,9 @@
 "use client";
 type Props = {
   textButton: string;
-  buttonType: "submit" | "reset";
 };
 
-const ButtonLogin = ({ textButton, buttonType }: Props) => {
+const ButtonLogin = ({ textButton }: Props) => {
   return (
     <button
       id="btnLogin"
@@ -53,7 +52,7 @@ const ButtonLogin = ({ textButton, buttonType }: Props) => {
         }
       }}
       className="mt-11 relative  flex justify-between items-center bg-[var(--color-primary)] w-[var(--size-login-input)] text-white py-[.7rem]  rounded-lg shadow-md"
-      type={`${buttonType ? buttonType : "submit"}`}
+      type="submit"
     >
       <div className="font-bold flex-1">{textButton}</div>
       <div

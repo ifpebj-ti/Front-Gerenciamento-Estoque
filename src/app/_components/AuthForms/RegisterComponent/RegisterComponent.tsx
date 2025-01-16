@@ -67,7 +67,6 @@ const RegisterComponent = ({ route }: Props) => {
               sendErrorPassOrEmail={handleSendErrorPassOrEmail}
             >
               <ButtonLogin
-                buttonType="submit"
                 textButton={`${isReplace ? "LOGAR" : "SOLICITAR NOVA SENHA"}`}
               />
 
@@ -86,10 +85,7 @@ const RegisterComponent = ({ route }: Props) => {
         return (
           <>
             <FormRequestPasswordChange>
-              <ButtonLogin
-                buttonType="submit"
-                textButton="SOLICITAR NOVA SENHA"
-              />
+              <ButtonLogin textButton="SOLICITAR NOVA SENHA" />
 
               <ButtonChangeLogin
                 click={() => {
@@ -106,7 +102,7 @@ const RegisterComponent = ({ route }: Props) => {
         return (
           <>
             <FormChangePass>
-              <ButtonLogin buttonType="submit" textButton="SALVAR" />
+              <ButtonLogin textButton="SALVAR" />
 
               <ButtonChangeLogin
                 click={() => {

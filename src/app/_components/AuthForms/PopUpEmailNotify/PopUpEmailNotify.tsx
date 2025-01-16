@@ -16,10 +16,7 @@ const PopUpEmailNotify = ({ email }: Props) => {
           para definir uma nova senha.
         </p>
         <Link href="/login">
-          <ButtonLogin
-            buttonType="submit"
-            textButton="IR PARA O LOGIN"
-          ></ButtonLogin>
+          <ButtonLogin textButton="IR PARA O LOGIN"></ButtonLogin>
         </Link>
       </div>
     </div>

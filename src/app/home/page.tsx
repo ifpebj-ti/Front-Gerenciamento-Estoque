@@ -34,10 +34,7 @@ const MainHome = () => {
               id="buttonHomeBackground"
             >
               <Link href={"/stock"}>
-                <ButtonLogin
-                  buttonType="submit"
-                  textButton="REALIZE SUA BUSCA"
-                ></ButtonLogin>
+                <ButtonLogin textButton="REALIZE SUA BUSCA"></ButtonLogin>
               </Link>
             </div>
           </div>
