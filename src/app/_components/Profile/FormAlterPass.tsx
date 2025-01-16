@@ -35,6 +35,7 @@ const FormAlterPass = ({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormDataAlterPassType>({
     resolver: zodResolver(SchemaFormAlterPass),
@@ -68,7 +69,7 @@ const FormAlterPass = ({
       token: session?.accessToken as string,
       email: email ? email : (session?.user?.email as string),
       data: {
-        password: value.password,
+        password: value.password === "" ? "" : (value.password as string),
         photo: imageSelected,
       },
     });
@@ -110,6 +111,8 @@ const FormAlterPass = ({
                 setShowSuccess(true);
                 setShowWindowConfirm(false);
                 setShowLoad(false);
+                setValue("password", "");
+                setValue("confirmPassword", "");
                 if (isRefetch) {
                   isRefetch();
                 }

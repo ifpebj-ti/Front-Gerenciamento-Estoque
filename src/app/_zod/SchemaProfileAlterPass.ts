@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const SchemaFormAlterPass = z
   .object({
-    password: z.string().min(6, "Senha muito curta"),
-    confirmPassword: z.string().min(6, "Senha muito curta"),
+    password: z.string().optional(),
+    confirmPassword: z.string().optional(),
   })
   .refine(
     (data) => {

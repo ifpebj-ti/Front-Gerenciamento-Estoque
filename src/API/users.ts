@@ -88,7 +88,10 @@ export const updateUser = async ({
   try {
     const response = await api.put(
       `/users/updateUser/${email}`,
-      { ...data, photo: data.photo ? data.photo : new File([], "") },
+      {
+        password: data.password ? data.password : "",
+        photo: data.photo ? data.photo : new File([], ""),
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
