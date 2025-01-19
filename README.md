@@ -1,8 +1,10 @@
+![Coverage](./badges/coverage.svg)
+
 # Inventory Manager
 
 This project is a system for managing product stocks. Here is the project's front-end, developed using JavaScript and Next.js.
 
-## Índice
+## Summary
 
 - [Installation](#installation)
 - [Technologies](#Technologies)
@@ -65,17 +67,18 @@ git clone https://github.com/ifpebj-ti/Front-Gerenciamento-Estoque.git
 ```bash
 # In Linux you can use the command "nano"
 
-  nano .env.local
+  nano .env.development
 
 ```
 
-- Content for the file .env.local
+- Content for the file .env.development
 
 ```bash
-# Copy and Past the following content in file .env.local, Don't forget to modify the variable's values:
+# Copy and Past the following content in file .env.development, Don't forget to modify the variable's values:
 
   NEXTAUTH_SECRET="You may generate any hash code"
   NEXTAUTH_URL="URL that your Web application is running"
+  NEXT_PUBLIC_URL="URL that your Web application is running"
   API_URL="URL that your API is running"
 
 ```
@@ -101,7 +104,7 @@ Attention: If you have used the command "nano", don't forget the press ctrl+o fo
 ## Tests
 
 ```bash
-  npm run test
+  npm run test:dev
 ```
 
 ## Development
