@@ -53,3 +53,7 @@ jobs:
         run: |
           curl -X POST "${{ secrets.WEBHOOK_SECRET }}" || echo "Webhook triggered"
 
+      - name: Remove old Docker images of frontend
+        run: |
+          docker images brazf/estoque-frontend --format "{{.ID}}" | tail -n +2 | xargs -r docker rmi
+
