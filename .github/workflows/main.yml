@@ -49,20 +49,7 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Pull Docker Image
-        run: docker pull brazf/estoque-frontend:latest
-
-      - name: Stop Existing Container
-        run: docker rm -f deploy_frontend || true
-
-      - name: Run New Container
+      - name: Call Portainer Webhook
         run: |
-          docker run -d --restart unless-stopped \
-            --network app_network \
-            -p 80:3000 \
-            --name deploy_frontend brazf/estoque-frontend
-
-      - name: Remove old Docker images of frontend
-        run: |
-          docker images brazf/estoque-frontend --format "{{.ID}}" | tail -n +2 | xargs -r docker rmi
+          curl -X POST "${{ secrets.WEBHOOK_SECRET }}" || echo "Webhook triggered"
 
