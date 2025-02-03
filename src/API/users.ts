@@ -203,3 +203,26 @@ export const sendEmailToResetPassword = async ({
     throw error; // Lança outros tipos de erros
   }
 };
+
+export const resetPassword = async ({
+  token,
+  newPassword,
+}: {
+  token: string;
+  newPassword: string;
+}) => {
+  try {
+    const response = await api.put(`/users/reset-password`, {
+      newPassword,
+      token,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw {
+        message: error.response?.data?.message || "Erro ao recuperar a senha",
+      };
+    }
+    throw error; // Lança outros tipos de erros
+  }
+};

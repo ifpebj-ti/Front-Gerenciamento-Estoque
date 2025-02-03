@@ -1,10 +1,11 @@
 "use client";
 import SchemaChangePass from "@/app/_zod/SchemaChangePass";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Title from "../Title/Title";
 import { z } from "zod";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   children: ReactNode;
@@ -17,16 +18,31 @@ const FormChangePass = ({ children }: Props) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(SchemaChangePass),
   });
+
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   // Define `onSubmit` com o tipo `SubmitHandler<FormData>`
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data);
     // Lógica para envio do formulário
   };
+
+  useEffect(() => {
+    if (!token || token === "") {
+      (function () {
+        window.location.pathname = "/login";
+      })();
+      return;
+    } else {
+      setValue("verify_code", token);
+    }
+  }, [token, setValue]);
 
   return (
     <form
