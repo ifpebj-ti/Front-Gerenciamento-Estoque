@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Header from "./../../../app/_components/Header/Header";
 import "@testing-library/jest-dom";
 import { useSession } from "next-auth/react";
