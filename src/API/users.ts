@@ -183,3 +183,23 @@ export const activateUser = async ({
     throw error; // Lança outros tipos de erros
   }
 };
+
+export const sendEmailToResetPassword = async ({
+  email,
+}: {
+  email: string;
+}) => {
+  try {
+    const response = await api.get(
+      `/users/sendEmailResetPassword?email=${email}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw {
+        message: error.response?.data?.message || "Erro ao enviar email",
+      };
+    }
+    throw error; // Lança outros tipos de erros
+  }
+};
