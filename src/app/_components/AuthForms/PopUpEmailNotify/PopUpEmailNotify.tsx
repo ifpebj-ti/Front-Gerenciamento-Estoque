@@ -15,7 +15,12 @@ const PopUpEmailNotify = ({ email }: Props) => {
           Um email foi enviado para {email ? email : "Default"} com instruções
           para definir uma nova senha.
         </p>
-        <Link href="/login">
+        <Link
+          onClick={() => {
+            window.location.pathname = "/login";
+          }}
+          href="/login"
+        >
           <ButtonLogin textButton="IR PARA O LOGIN"></ButtonLogin>
         </Link>
       </div>

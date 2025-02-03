@@ -8,12 +8,25 @@ import FormRequestPasswordChange from "../FormRequestPasswordChange/FormRequestP
 import FormChangePass from "../FormChangePass/FormChangePass";
 import WindowIncorrectlyPass from "../FormLogin/WindowIncorrectlyPass";
 import WindowLoad from "../../WindowLoad/WindowLoad";
+import WindowConfirm from "../../WindowConfirm/WindowConfirm";
+import { useSendEmailToResetPassword } from "@/mutations/UserMutations";
+import WindowError from "../../WindowError/WindowError";
+import PopUpEmailNotify from "../PopUpEmailNotify/PopUpEmailNotify";
 
 type Props = {
   route: string;
 };
 const RegisterComponent = ({ route }: Props) => {
   const [errorPassOrEmail, setErrorPassOrEmail] = useState<boolean>(false);
+  const [emailToSendToResetPass, setEmailToSendToResetPass] =
+    useState<string>("");
+  const [windowConfirmSendEmail, setWindowConfirmSendEmail] = useState(false);
+  const [showWindowError, setShowWindowError] = useState({
+    show: false,
+    message: "",
+  });
+  const [showWindowSuccess, setShowWindowSuccess] = useState(false);
+  const useSendEmail = useSendEmailToResetPassword();
   /* eslint-disable */
   const [count, setCount] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +68,11 @@ const RegisterComponent = ({ route }: Props) => {
     }, 1000); // Executa a cada 1 segundo
   };
 
+  const receiverEmail = (email: string) => {
+    setEmailToSendToResetPass(email);
+    setWindowConfirmSendEmail(true);
+  };
+
   const renderForm = () => {
     switch (pathName) {
       case "/login":
@@ -84,7 +102,7 @@ const RegisterComponent = ({ route }: Props) => {
       case "/recover":
         return (
           <>
-            <FormRequestPasswordChange>
+            <FormRequestPasswordChange sendEmail={receiverEmail}>
               <ButtonLogin textButton="SOLICITAR NOVA SENHA" />
 
               <ButtonChangeLogin
@@ -124,6 +142,48 @@ const RegisterComponent = ({ route }: Props) => {
     <>
       {isLoading && <WindowLoad />}
       {errorPassOrEmail && <WindowIncorrectlyPass />}
+      {showWindowError.show && (
+        <WindowError
+          text={showWindowError.message}
+          sendClose={() => {
+            setShowWindowError({ show: false, message: "" });
+          }}
+        />
+      )}
+      {showWindowSuccess && (
+        <div className="w-full h-full flex justify-center items-center absolute bg-black/50 z-20">
+          <PopUpEmailNotify email={emailToSendToResetPass}></PopUpEmailNotify>
+        </div>
+      )}
+      {windowConfirmSendEmail && (
+        <WindowConfirm
+          title="Você tem certeza que deseja recuperar a senha?"
+          sendClose={() => {
+            setWindowConfirmSendEmail(false);
+          }}
+          confirm={() => {
+            useSendEmail.mutate(
+              { email: emailToSendToResetPass },
+              {
+                onSuccess: () => {
+                  setShowWindowSuccess(true);
+                },
+                onError: (error: any) => {
+                  setShowWindowError({
+                    show: true,
+                    message: error.message,
+                  });
+                },
+              }
+            );
+            setShowWindowError({
+              show: false,
+              message: "",
+            });
+            setWindowConfirmSendEmail(false);
+          }}
+        ></WindowConfirm>
+      )}
       <main className="flex justify-center items-center w-full">
         <section
           className={` flex transition-all ease-linear duration-500  gap-11 h-screen justify-center w-full  sm:w-[1144px] items-center `}

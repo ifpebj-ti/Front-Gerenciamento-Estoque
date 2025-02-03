@@ -190,7 +190,7 @@ export const sendEmailToResetPassword = async ({
   email: string;
 }) => {
   try {
-    const response = await api.get(
+    const response = await api.post(
       `/users/sendEmailResetPassword?email=${email}`
     );
     return response.data;
