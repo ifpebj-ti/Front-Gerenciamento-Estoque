@@ -2,6 +2,7 @@ import {
   activateUser,
   addUser,
   deactivateUser,
+  resetPassword,
   sendEmailToResetPassword,
   updateUser,
 } from "@/API/users";
@@ -37,6 +38,13 @@ export const useActivateUser = () => {
 export const useSendEmailToResetPassword = () => {
   const mutation = useMutation({
     mutationFn: sendEmailToResetPassword,
+  });
+  return mutation;
+};
+
+export const useResetPassword = () => {
+  const mutation = useMutation({
+    mutationFn: resetPassword,
   });
   return mutation;
 };

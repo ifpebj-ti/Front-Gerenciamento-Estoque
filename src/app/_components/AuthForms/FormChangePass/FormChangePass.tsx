@@ -9,12 +9,13 @@ import { useSearchParams } from "next/navigation";
 
 type Props = {
   children: ReactNode;
+  sendEmailAndToken: (password: string, token: string) => void;
 };
 
 // Cria um tipo específico para o formulário usando o SchemaLoginForm
 type FormData = z.infer<typeof SchemaChangePass>;
 
-const FormChangePass = ({ children }: Props) => {
+const FormChangePass = ({ children, sendEmailAndToken }: Props) => {
   const {
     register,
     handleSubmit,
@@ -26,11 +27,16 @@ const FormChangePass = ({ children }: Props) => {
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-
   // Define `onSubmit` com o tipo `SubmitHandler<FormData>`
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    // Lógica para envio do formulário
+    if (
+      data.password === "" ||
+      data.confirm_pass === "" ||
+      token === null ||
+      token === ""
+    )
+      return null;
+    sendEmailAndToken(data.password, token);
   };
 
   useEffect(() => {

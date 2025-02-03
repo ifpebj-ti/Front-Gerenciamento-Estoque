@@ -9,9 +9,13 @@ import FormChangePass from "../FormChangePass/FormChangePass";
 import WindowIncorrectlyPass from "../FormLogin/WindowIncorrectlyPass";
 import WindowLoad from "../../WindowLoad/WindowLoad";
 import WindowConfirm from "../../WindowConfirm/WindowConfirm";
-import { useSendEmailToResetPassword } from "@/mutations/UserMutations";
+import {
+  useResetPassword,
+  useSendEmailToResetPassword,
+} from "@/mutations/UserMutations";
 import WindowError from "../../WindowError/WindowError";
 import PopUpEmailNotify from "../PopUpEmailNotify/PopUpEmailNotify";
+import WindowSuccess from "../../WindowSuccess/WindowSuccess";
 
 type Props = {
   route: string;
@@ -21,12 +25,23 @@ const RegisterComponent = ({ route }: Props) => {
   const [emailToSendToResetPass, setEmailToSendToResetPass] =
     useState<string>("");
   const [windowConfirmSendEmail, setWindowConfirmSendEmail] = useState(false);
+  const [windowConfirmResetPass, setWindowConfirmResetPass] = useState(false);
+  const [showWindowSuccessResetPass, setShowWindowSuccessResetPass] =
+    useState(false);
+  const [newPassword, setNewPassword] = useState<{
+    token: string;
+    newPassword: string;
+  }>({
+    token: "",
+    newPassword: "",
+  });
   const [showWindowError, setShowWindowError] = useState({
     show: false,
     message: "",
   });
   const [showWindowSuccess, setShowWindowSuccess] = useState(false);
   const useSendEmail = useSendEmailToResetPassword();
+  const resetPassword = useResetPassword();
   /* eslint-disable */
   const [count, setCount] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +86,11 @@ const RegisterComponent = ({ route }: Props) => {
   const receiverEmail = (email: string) => {
     setEmailToSendToResetPass(email);
     setWindowConfirmSendEmail(true);
+  };
+
+  const receiverTokenAndNewPass = (token: string, newPass: string) => {
+    setNewPassword({ token, newPassword: newPass });
+    setWindowConfirmResetPass(true);
   };
 
   const renderForm = () => {
@@ -119,7 +139,7 @@ const RegisterComponent = ({ route }: Props) => {
       case "/newPass":
         return (
           <>
-            <FormChangePass>
+            <FormChangePass sendEmailAndToken={receiverTokenAndNewPass}>
               <ButtonLogin textButton="SALVAR" />
 
               <ButtonChangeLogin
@@ -140,6 +160,12 @@ const RegisterComponent = ({ route }: Props) => {
 
   return (
     <>
+      {showWindowSuccessResetPass && (
+        <WindowSuccess
+          text="Senha alterada com sucesso!"
+          sendClose={() => setShowWindowSuccessResetPass(false)}
+        ></WindowSuccess>
+      )}
       {isLoading && <WindowLoad />}
       {errorPassOrEmail && <WindowIncorrectlyPass />}
       {showWindowError.show && (
@@ -154,6 +180,39 @@ const RegisterComponent = ({ route }: Props) => {
         <div className="w-full h-full flex justify-center items-center absolute bg-black/50 z-20">
           <PopUpEmailNotify email={emailToSendToResetPass}></PopUpEmailNotify>
         </div>
+      )}
+      {windowConfirmResetPass && (
+        <WindowConfirm
+          sendClose={() => setWindowConfirmResetPass(false)}
+          title="Tem certeza que deseja salvar a nova senha?"
+          confirm={() => {
+            setIsLoading(true);
+            resetPassword.mutate(
+              {
+                token: newPassword.token,
+                newPassword: newPassword.newPassword,
+              },
+              {
+                onSuccess: () => {
+                  setShowWindowSuccessResetPass(true);
+                },
+                onError: (error: any) => {
+                  setShowWindowError({
+                    show: true,
+                    message: error.message,
+                  });
+                },
+              }
+            );
+
+            setIsLoading(false);
+            setShowWindowError({
+              show: false,
+              message: "",
+            });
+            setWindowConfirmResetPass(false);
+          }}
+        ></WindowConfirm>
       )}
       {windowConfirmSendEmail && (
         <WindowConfirm
