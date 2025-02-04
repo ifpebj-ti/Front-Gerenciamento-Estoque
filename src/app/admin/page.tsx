@@ -57,21 +57,27 @@ const Admin = () => {
             >
               Adicionar Produto
             </button>
-            {products.data?.content.map((product: Product) => {
-              return (
-                <CardProductListAdmin
-                  refetch={products.refetch}
-                  key={product.id}
-                  sendOpenEditWindow={() => {
-                    // alert("editar + " + product.id);
-                    setShowWindowAddProduct(false);
-                    setShowWindowEditProduct(!showWindowEditProduct);
-                    setProdutSelectToEdit(product.id);
-                  }}
-                  data={product}
-                ></CardProductListAdmin>
-              );
-            })}
+            {products.data && products.data?.content.length > 0 ? (
+              products.data?.content.map((product: Product) => {
+                return (
+                  <CardProductListAdmin
+                    refetch={products.refetch}
+                    key={product.id}
+                    sendOpenEditWindow={() => {
+                      // alert("editar + " + product.id);
+                      setShowWindowAddProduct(false);
+                      setShowWindowEditProduct(!showWindowEditProduct);
+                      setProdutSelectToEdit(product.id);
+                    }}
+                    data={product}
+                  ></CardProductListAdmin>
+                );
+              })
+            ) : (
+              <div className="text-center mt-16 font-bold text-lg">
+                Não há produtos para mostrar
+              </div>
+            )}
             <Pagination
               sendCurrentPage={(page: number) => {
                 setCurrentPage(page);
@@ -93,7 +99,7 @@ const Admin = () => {
             >
               Adicionar Usuário
             </button>
-            {users &&
+            {users.data.length > 0 ? (
               users.data.map((user: UserInfoType) => {
                 return (
                   <CardUserListAdmin
@@ -110,7 +116,12 @@ const Admin = () => {
                     }}
                   ></CardUserListAdmin>
                 );
-              })}
+              })
+            ) : (
+              <div className="text-center mt-16 font-bold text-lg">
+                Não há usuários cadastrados
+              </div>
+            )}
           </>
         );
 

@@ -86,34 +86,40 @@ const Stock = () => {
           ></FilterProducts>
         </section>
         <section className="w-full  grid md:grid-cols-2 justify-items-center   backgroundLoginPoint:grid-cols-4 backgroundLoginPoint:px-0 mt-8 gap-8 md:px-16  ">
-          {products.data?.content.map((product: Product) => {
-            return (
-              <CardProduct
-                key={product.id}
-                click={() => {
-                  setSelectedProduct({
-                    photo: product.photo ? product.photo : null,
-                    name: `${product.name}`,
-                    description: product.description,
-                    categories: product.categories,
-                    stockValue: product.stockValue,
-                    unitValue: product.unitValue,
-                    quantity: product.quantity,
-                    id: product.id,
-                    critical_quantity: product.critical_quantity,
-                  });
-                  setViewProductOpen(!viewProductOpen);
-                }}
-                data={{
-                  disponible: product.quantity > 0 ? true : false,
-                  imageUrl: product.photo
-                    ? base64ToBlob(product.photo)
-                    : "https://placehold.co/600x400",
-                  title: `${product.name}`,
-                }}
-              ></CardProduct>
-            );
-          })}
+          {products.data?.content && products.data?.content.length > 0 ? (
+            products.data?.content.map((product: Product) => {
+              return (
+                <CardProduct
+                  key={product.id}
+                  click={() => {
+                    setSelectedProduct({
+                      photo: product.photo ? product.photo : null,
+                      name: `${product.name}`,
+                      description: product.description,
+                      categories: product.categories,
+                      stockValue: product.stockValue,
+                      unitValue: product.unitValue,
+                      quantity: product.quantity,
+                      id: product.id,
+                      critical_quantity: product.critical_quantity,
+                    });
+                    setViewProductOpen(!viewProductOpen);
+                  }}
+                  data={{
+                    disponible: product.quantity > 0 ? true : false,
+                    imageUrl: product.photo
+                      ? base64ToBlob(product.photo)
+                      : "https://placehold.co/600x400",
+                    title: `${product.name}`,
+                  }}
+                ></CardProduct>
+              );
+            })
+          ) : (
+            <div className="text-center mt-16 font-bold w-full text-lg  col-span-full">
+              Não há produtos para mostrar
+            </div>
+          )}
         </section>
         <Pagination
           sendCurrentPage={(page) => {
