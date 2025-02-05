@@ -157,5 +157,3 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow, refetch }: Props) => {
 };
 
 export default CardProductListAdmin;
-
-//https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzVUsms7oB4xz8w1geynBqKleFSF51p7reVg&s
