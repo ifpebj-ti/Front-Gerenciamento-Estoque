@@ -29,6 +29,8 @@ const Admin = () => {
   const [filters, setFilters] = useState<{ category: number | null }>({
     category: null,
   });
+  const [listUsers, setListUsers] = useState<UserInfoType[]>([]);
+  const [listProducts, setListProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1); // Controle da página
   const products = useGetProducts({
     token: session?.accessToken as string,
@@ -38,11 +40,26 @@ const Admin = () => {
   });
   const users = useGetUsers(session?.accessToken as string);
   const [userAction, setUserAction] = useState<"add" | "edit">("add");
+
   // Resetar a página ao mudar os filtros
   useEffect(() => {
     setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
     products.refetch(); // Refaz a requisição quando os filtros mudarem
   }, [filters, products]);
+
+  useEffect(() => {
+    if (users.data) {
+      setListUsers(users.data);
+    }
+    return () => {};
+  }, [users]);
+
+  useEffect(() => {
+    if (products.data) {
+      setListProducts(products.data.content);
+    }
+    return () => {};
+  }, [products]);
   const renderSession = () => {
     switch (currentSession) {
       case 0:
@@ -57,14 +74,13 @@ const Admin = () => {
             >
               Adicionar Produto
             </button>
-            {products.data && products.data?.content.length > 0 ? (
-              products.data?.content.map((product: Product) => {
+            {listProducts.length > 0 ? (
+              listProducts.map((product: Product) => {
                 return (
                   <CardProductListAdmin
                     refetch={products.refetch}
                     key={product.id}
                     sendOpenEditWindow={() => {
-                      // alert("editar + " + product.id);
                       setShowWindowAddProduct(false);
                       setShowWindowEditProduct(!showWindowEditProduct);
                       setProdutSelectToEdit(product.id);
@@ -99,8 +115,8 @@ const Admin = () => {
             >
               Adicionar Usuário
             </button>
-            {users.data.length > 0 ? (
-              users.data.map((user: UserInfoType) => {
+            {listUsers.length > 0 ? (
+              listUsers.map((user: UserInfoType) => {
                 return (
                   <CardUserListAdmin
                     isRefetch={() => {

@@ -31,6 +31,7 @@ const Stock = () => {
     critical_quantity: 0,
     id: 0,
   });
+  const [listProducts, setListProducts] = useState<Product[]>([]);
 
   // Refazer a requisição sempre que os filtros ou página forem alterados
   const products = useGetProducts({
@@ -46,6 +47,12 @@ const Stock = () => {
     products.refetch(); // Refaz a requisição quando os filtros mudarem
   }, [filters, products]);
 
+  useEffect(() => {
+    if (products.data) {
+      setListProducts(products.data.content);
+    }
+    return () => {};
+  }, [products]);
   return (
     <>
       {products.isLoading && <WindowLoad></WindowLoad>}
@@ -86,8 +93,8 @@ const Stock = () => {
           ></FilterProducts>
         </section>
         <section className="w-full  grid md:grid-cols-2 justify-items-center   backgroundLoginPoint:grid-cols-4 backgroundLoginPoint:px-0 mt-8 gap-8 md:px-16  ">
-          {products.data?.content && products.data?.content.length > 0 ? (
-            products.data?.content.map((product: Product) => {
+          {listProducts.length > 0 ? (
+            listProducts.map((product: Product) => {
               return (
                 <CardProduct
                   key={product.id}
