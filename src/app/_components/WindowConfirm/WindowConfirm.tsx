@@ -26,6 +26,7 @@ const WindowConfirm = ({ title, message, sendClose, confirm }: Props) => {
             Cancelar
           </button>
           <button
+            data-testid="confirm"
             onClick={(e) => {
               e.preventDefault();
               confirm();

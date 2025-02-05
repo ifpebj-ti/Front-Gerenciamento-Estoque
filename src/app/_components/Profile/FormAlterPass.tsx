@@ -201,20 +201,20 @@ const FormAlterPass = ({
                     r="23"
                     fill="url(#paint0_linear_142_300)"
                   />
-                  <g clip-path="url(#clip0_142_300)">
+                  <g clipPath="url(#clip0_142_300)">
                     <path
                       d="M40.483 32.1381C40.483 32.9795 40.1487 33.7864 39.5538 34.3813C38.9589 34.9763 38.1519 35.3105 37.3106 35.3105H8.75884C7.91746 35.3105 7.11055 34.9763 6.5156 34.3813C5.92066 33.7864 5.58643 32.9795 5.58643 32.1381V14.6898C5.58643 13.8484 5.92066 13.0415 6.5156 12.4466C7.11055 11.8516 7.91746 11.5174 8.75884 11.5174H15.1037L18.2761 6.75879H27.7933L30.9657 11.5174H37.3106C38.1519 11.5174 38.9589 11.8516 39.5538 12.4466C40.1487 13.0415 40.483 13.8484 40.483 14.6898V32.1381Z"
                       stroke="#1E1E1E"
-                      stroke-width="4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M23.0347 28.9657C26.5389 28.9657 29.3795 26.125 29.3795 22.6209C29.3795 19.1167 26.5389 16.276 23.0347 16.276C19.5305 16.276 16.6899 19.1167 16.6899 22.6209C16.6899 26.125 19.5305 28.9657 23.0347 28.9657Z"
                       stroke="#1E1E1E"
-                      stroke-width="4"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </g>
                   <defs>
@@ -226,7 +226,7 @@ const FormAlterPass = ({
                       y2="46"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop offset="0.5" stop-color="#E1E1E1" />
+                      <stop offset="0.5" stopColor="#E1E1E1" />
                     </linearGradient>
                     <clipPath id="clip0_142_300">
                       <rect
