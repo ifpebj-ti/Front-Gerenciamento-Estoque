@@ -52,7 +52,7 @@ const Stock = () => {
       setListProducts(products.data.content);
     }
     return () => {};
-  }, [products]);
+  }, [products.data]);
   return (
     <>
       {products.isLoading && <WindowLoad></WindowLoad>}

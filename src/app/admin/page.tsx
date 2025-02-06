@@ -59,7 +59,7 @@ const Admin = () => {
       setListProducts(products.data.content);
     }
     return () => {};
-  }, [products]);
+  }, [products.data]);
   const renderSession = () => {
     switch (currentSession) {
       case 0:
