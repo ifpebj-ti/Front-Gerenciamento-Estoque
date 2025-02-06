@@ -29,8 +29,6 @@ const createTestQueryClient = () =>
   });
 
 describe("FormAlterData Component", () => {
-  const mockSendClose = jest.fn();
-  const mockIsRefetch = jest.fn();
   const mockMutate = jest.fn();
 
   beforeEach(() => {
