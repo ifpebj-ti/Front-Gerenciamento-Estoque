@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import WindowAddNewUser from "./../../../app/_components/Admin/WindowAddNewUser";
 import { useSession } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -17,6 +17,7 @@ const createTestQueryClient = () =>
 
 describe("WindowAddNewUser Component", () => {
   const mockSendClose = jest.fn();
+  /* eslint-disable */
   const mockIsRefetch = jest.fn();
 
   const mockUser: UserInfoType = {

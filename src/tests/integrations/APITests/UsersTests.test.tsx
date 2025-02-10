@@ -5,7 +5,6 @@ import {
   getUsers,
   getUser,
   addUser,
-  sendEmailToResetPassword,
   resetPassword,
 } from "./../../../API/users"; // Ajuste o caminho conforme sua estrutura
 import { UserRegisterType } from "@/types/userType";
