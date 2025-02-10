@@ -190,8 +190,8 @@ export const sendEmailToResetPassword = async ({
   email: string;
 }) => {
   try {
-    const response = await axios.post(
-      `https://137.131.180.24:8080/users/sendEmailResetPassword?email=${email}`
+    const response = await api.post(
+      `/users/sendEmailResetPassword?email=${email}`
     );
     return response.data;
   } catch (error) {
