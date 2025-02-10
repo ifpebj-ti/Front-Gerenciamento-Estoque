@@ -193,7 +193,7 @@ export const sendEmailToResetPassword = async ({
     const response = await api.post(
       `/users/sendEmailResetPassword?email=${email}`
     );
-    return response.data;
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw {

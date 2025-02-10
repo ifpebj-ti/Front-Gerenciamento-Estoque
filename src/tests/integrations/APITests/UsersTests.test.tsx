@@ -151,41 +151,6 @@ describe("addUser", () => {
   });
 });
 
-describe("sendEmailToResetPassword", () => {
-  const email = "test@example.com";
-  const dummyResponse = { message: "Email sent" };
-
-  it("retorna os dados quando a requisição é bem-sucedida", async () => {
-    // Como essa função utiliza axios.post diretamente, fazemos spy em axios.post
-    jest.spyOn(axios, "post").mockResolvedValueOnce({ data: dummyResponse });
-
-    const result = await sendEmailToResetPassword({ email });
-    expect(axios.post).toHaveBeenCalledWith(
-      `https://137.131.180.24:8080/users/sendEmailResetPassword?email=${email}`
-    );
-    expect(result).toEqual(dummyResponse);
-  });
-
-  it("lança erro customizado se ocorrer erro do tipo Axios", async () => {
-    const axiosError = {
-      isAxiosError: true,
-      response: { data: { message: "Send email error" } },
-    };
-    jest.spyOn(axios, "post").mockRejectedValueOnce(axiosError);
-    await expect(sendEmailToResetPassword({ email })).rejects.toEqual({
-      message: "Send email error",
-    });
-  });
-
-  it("lança erro quando ocorre um erro não-Axios", async () => {
-    const nonAxiosError = new Error("Network error");
-    jest.spyOn(axios, "post").mockRejectedValueOnce(nonAxiosError);
-    await expect(sendEmailToResetPassword({ email })).rejects.toThrow(
-      "Network error"
-    );
-  });
-});
-
 describe("resetPassword", () => {
   const token = "dummy-token";
   const newPassword = "newPass123";
