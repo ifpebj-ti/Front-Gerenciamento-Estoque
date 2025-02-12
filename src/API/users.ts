@@ -212,11 +212,18 @@ export const resetPassword = async ({
   newPassword: string;
 }) => {
   try {
-    console.log(token);
-    const response = await api.put(`/users/reset-password`, {
-      newPassword: newPassword,
-      token: token,
-    });
+    const response = await api.put(
+      `/users/reset-password`,
+      {
+        newPassword: newPassword,
+        token: token,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
