@@ -212,6 +212,7 @@ export const resetPassword = async ({
   newPassword: string;
 }) => {
   try {
+    console.log(token);
     const response = await api.put(`/users/reset-password`, {
       newPassword: newPassword,
       token: token,

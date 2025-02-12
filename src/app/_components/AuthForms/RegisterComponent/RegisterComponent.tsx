@@ -89,7 +89,7 @@ const RegisterComponent = ({ route }: Props) => {
   };
 
   const receiverTokenAndNewPass = (token: string, newPass: string) => {
-    setNewPassword({ token, newPassword: newPass });
+    setNewPassword({ token: token, newPassword: newPass });
     setWindowConfirmResetPass(true);
   };
 

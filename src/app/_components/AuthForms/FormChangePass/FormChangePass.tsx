@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 
 type Props = {
   children: ReactNode;
-  sendEmailAndToken: (password: string, token: string) => void;
+  sendEmailAndToken: (token: string, password: string) => void;
 };
 
 // Cria um tipo específico para o formulário usando o SchemaLoginForm
@@ -36,7 +36,7 @@ const FormChangePass = ({ children, sendEmailAndToken }: Props) => {
       token === ""
     )
       return null;
-    sendEmailAndToken(data.password, token);
+    sendEmailAndToken(token, data.password);
   };
 
   useEffect(() => {
