@@ -213,8 +213,8 @@ export const resetPassword = async ({
 }) => {
   try {
     const response = await api.put(`/users/reset-password`, {
-      newPassword,
-      token,
+      newPassword: newPassword,
+      token: token,
     });
     return response.data;
   } catch (error) {
