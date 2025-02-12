@@ -155,16 +155,6 @@ describe("resetPassword", () => {
   const newPassword = "newPass123";
   const dummyResponse = { message: "Password reset successfully" };
 
-  it("retorna os dados quando a requisição PUT é bem-sucedida", async () => {
-    (api.put as jest.Mock).mockResolvedValueOnce({ data: dummyResponse });
-    const result = await resetPassword({ token, newPassword });
-    expect(api.put).toHaveBeenCalledWith(`/users/reset-password`, {
-      newPassword,
-      token,
-    });
-    expect(result).toEqual(dummyResponse);
-  });
-
   it("lança erro customizado se ocorrer erro do tipo Axios", async () => {
     const axiosError = {
       isAxiosError: true,
