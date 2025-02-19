@@ -16,6 +16,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+          
+      - name: Create .env.production
+        run: |
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" > .env.production
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}" >> .env.production
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.API_URL }}" >> .env.production
+          echo "NODE_ENV=production" >> .env.production
 
       - name: Install dependencies
         run: npm install
