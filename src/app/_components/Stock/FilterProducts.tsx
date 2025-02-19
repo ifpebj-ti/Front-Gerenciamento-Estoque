@@ -22,7 +22,7 @@ const FilterProducts = ({ sendName, sendCategory, isUser }: Props) => {
           className="placeholder:text-slate-400 px-2 w-full focus:outline-none focus:font-bold"
           type="text"
           name=""
-          id=""
+          id="name"
           placeholder={isUser ? "Nome do usuário" : "Nome do produto"}
         />
         <svg
@@ -66,10 +66,15 @@ const FilterProducts = ({ sendName, sendCategory, isUser }: Props) => {
           <button
             onClick={() => {
               sendCategory(null);
+              sendName("");
               const selectElement = document.querySelector(
                 "#category_select"
               ) as HTMLSelectElement;
               selectElement.value = "default";
+              const nameElement = document.querySelector(
+                "#name"
+              ) as HTMLInputElement;
+              nameElement.value = "";
             }}
             className="font-extrabold text-nowrap uppercase px-9 py-1 text-slate-400 border-[1px] border-slate-300 rounded-md hover:scale-105 transition-all duration-200 hover:text-black hover:border-black md:w-[500px]"
             type="reset"

@@ -149,7 +149,8 @@ const Admin = () => {
               </div>
               {showDefaultPass && (
                 <div className=" absolute rounded-md max-w-56 text-center p-2 bg-black/70 text-white top-9 right-0  shadow-md">
-                  A senha padrão para novos usuários é: T2b95*R8
+                  A senha padrão para novos usuários é:{" "}
+                  <strong>T2b95*R8</strong>
                 </div>
               )}
             </div>

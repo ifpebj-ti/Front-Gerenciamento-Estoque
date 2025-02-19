@@ -9,12 +9,13 @@ export const getProducts = async ({
   searchName,
   category,
 }: getProductsType): Promise<ProductDataResponse | null> => {
-  console.log(searchName);
   try {
     const response = await api.get(
       `/products?page=${
         currentPage ? currentPage - 1 : 0
-      }&size=4&sort=name,desc${category ? `&categoryId=${category}` : ""}`,
+      }&size=4&sort=name,desc${
+        category ? `&categoryId=${category}` : ""
+      }&productName=${searchName ? searchName : ""}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
