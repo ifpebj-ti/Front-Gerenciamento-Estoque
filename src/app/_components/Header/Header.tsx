@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import ProfileCard from "../ProfileCard/ProfileCard";
 import { useSession } from "next-auth/react";
 import WindowLoad from "../WindowLoad/WindowLoad";
+import { useGetUser } from "@/queries/UsersQueries";
 
 const Header = () => {
   const { data: session } = useSession();
 
+  const [profilePhoto, setProfilePhoto] = useState("");
   const [route, setRoute] = useState("");
+  const user = useGetUser(session?.accessToken as string);
   useEffect(() => {
     (function () {
       if (typeof window !== "undefined") {
@@ -17,6 +20,13 @@ const Header = () => {
     })();
     return () => {};
   }, []);
+  useEffect(() => {
+    (async () => {
+      if (user) {
+        setProfilePhoto(user.data?.photo);
+      }
+    })();
+  }, [user, setProfilePhoto]);
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
@@ -149,7 +159,7 @@ const Header = () => {
           <ProfileCard
             data={{
               name: `${session?.userInfo.name || ""}`,
-              avatar: `${session?.userInfo.photo || ""}`,
+              avatar: `${profilePhoto || ""}`,
               email: `${session?.userInfo.email || ""}`,
             }}
           ></ProfileCard>

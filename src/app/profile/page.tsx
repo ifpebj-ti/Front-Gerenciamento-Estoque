@@ -1,13 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../_components/Header/Header";
 import FormAlterPass from "../_components/Profile/FormAlterPass";
 import { useSession } from "next-auth/react";
+import { useGetUser } from "@/queries/UsersQueries";
 
 const Profile = () => {
   const { data: session } = useSession();
   const [isEditMode, setIsEditMode] = useState(false);
-
+  const [profilePhoto, setProfilePhoto] = useState("");
+  const user = useGetUser(session?.accessToken as string);
+  useEffect(() => {
+    (async () => {
+      if (user) {
+        setProfilePhoto(user.data?.photo);
+      }
+    })();
+  }, [user, setProfilePhoto]);
   return (
     <>
       <Header></Header>
@@ -19,7 +28,7 @@ const Profile = () => {
           sendClose={() => {
             setIsEditMode(!isEditMode);
           }}
-          imageProfile={`${session?.userInfo.photo}` || ""}
+          imageProfile={`${profilePhoto}` || ""}
           isEditMode={isEditMode}
         >
           <button

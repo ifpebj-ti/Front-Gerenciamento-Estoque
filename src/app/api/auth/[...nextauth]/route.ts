@@ -7,19 +7,8 @@ interface User {
   id: string;
   token: string;
   username: string;
-}
-
-function encodeBase64(value: string): string {
-  return Buffer.from(value).toString("base64");
-}
-
-interface User {
-  id: string;
-  token: string;
-  username: string;
   email: string;
   status: boolean;
-  photo: string;
   first_acess: boolean;
   roles: { id: string; authority: string }[];
 }
@@ -29,12 +18,15 @@ interface UserInfo {
   name: string;
   email: string;
   status: boolean;
-  photo: string;
   first_acess: boolean;
   roles: { id: string; authority: string }[];
 }
 
 let userInfo: UserInfo;
+
+function encodeBase64(value: string): string {
+  return Buffer.from(value).toString("base64");
+}
 
 const handler = NextAuth({
   pages: {
@@ -90,15 +82,15 @@ const handler = NextAuth({
           if (requestVerify) {
             userInfo = requestVerify.data;
           }
-          // Retorna o usuário com o token
+
+          // Retorna o usuário sem a propriedade `photo`
           return {
-            id: `${userInfo.id}`, // Substitua por um ID real, se disponível
+            id: `${userInfo.id}`,
             token: data.access_token,
             username: userInfo.name,
             email: userInfo.email,
             status: userInfo.status,
             roles: userInfo.roles,
-            photo: userInfo.photo,
             first_acess: userInfo.first_acess,
           };
         } catch (e) {
@@ -115,13 +107,20 @@ const handler = NextAuth({
         token.accessToken = customUser.token;
         token.username = customUser.username;
         token.id = customUser.id;
-        token.userInfo = userInfo; // Inclua o objeto `userInfo` completo
+        token.userInfo = {
+          id: customUser.id,
+          name: customUser.username,
+          email: customUser.email,
+          status: customUser.status,
+          roles: customUser.roles,
+          first_acess: customUser.first_acess,
+        };
       }
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
-      session.userInfo = token.userInfo as UserInfoType; // Inclua o userInfo na sessão
+      session.userInfo = token.userInfo as UserInfoType;
       return session;
     },
   },
