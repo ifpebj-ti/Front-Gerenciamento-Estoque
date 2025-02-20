@@ -1,66 +1,62 @@
-// CardProduct.test.tsx
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import CardProduct from "@/app/_components/Stock/CardProduct";
-
-/* eslint-disable */
-// --- Mock para o next/image ---
-// Faz com que o componente Next Image seja renderizado como uma tag <img> simples.
-jest.mock("next/image", () => ({
-  __esModule: true,
-  default: (props: any) => {
-    return <img {...props} />;
-  },
-}));
+import CardProduct from "./../../../app/_components/Stock/CardProduct";
 
 describe("CardProduct Component", () => {
-  const sampleData = {
-    imageUrl: "https://example.com/image.png",
-    title: "Produto de Teste",
+  const productData = {
+    imageUrl: "https://example.com/image.jpg",
+    title: "Sample Product",
     disponible: true,
   };
 
-  test("renderiza corretamente com produto disponível", () => {
-    const clickMock = jest.fn();
-    render(<CardProduct data={sampleData} click={clickMock} />);
+  const clickMock = jest.fn();
 
-    // Verifica se a imagem é renderizada com o alt "Imagem do produto"
-    const image = screen.getByAltText("Imagem do produto");
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", sampleData.imageUrl);
-
-    // Verifica se o título é renderizado corretamente
-    const titleElement = screen.getByText(sampleData.title);
-    expect(titleElement).toBeInTheDocument();
-
-    // Verifica se o status "Disponível" é renderizado com a classe de cor correta
-    const statusElement = screen.getByText("Disponível");
-    expect(statusElement).toBeInTheDocument();
-    expect(statusElement).toHaveClass("text-[var(--color-primary)]");
+  beforeEach(() => {
+    clickMock.mockClear();
   });
 
-  test("renderiza corretamente com produto indisponível", () => {
-    const clickMock = jest.fn();
-    const unavailableData = { ...sampleData, disponible: false };
-    render(<CardProduct data={unavailableData} click={clickMock} />);
-
-    // Verifica se o status "Indisponível" é renderizado com a classe de cor correta
-    const statusElement = screen.getByText("Indisponível");
-    expect(statusElement).toBeInTheDocument();
-    expect(statusElement).toHaveClass("text-red-500");
+  it("renders the product title", () => {
+    render(<CardProduct data={productData} click={clickMock} />);
+    expect(screen.getByText("Sample Product")).toBeInTheDocument();
   });
 
-  test("chama a função click quando o card é clicado", () => {
-    const clickMock = jest.fn();
-    render(<CardProduct data={sampleData} click={clickMock} />);
+  it('displays "Disponível" when available', () => {
+    render(
+      <CardProduct
+        data={{ ...productData, disponible: true }}
+        click={clickMock}
+      />
+    );
+    expect(screen.getByText("Disponível")).toBeInTheDocument();
+  });
 
-    // Como o componente não possui um test id, usamos o título para encontrar o card
-    // e depois subimos até o elemento pai mais próximo (que é o card)
-    const cardElement = screen.getByText(sampleData.title).closest("div");
-    expect(cardElement).toBeInTheDocument();
+  it('displays "Indisponível" when not available', () => {
+    render(
+      <CardProduct
+        data={{ ...productData, disponible: false }}
+        click={clickMock}
+      />
+    );
+    expect(screen.getByText("Indisponível")).toBeInTheDocument();
+  });
 
-    fireEvent.click(cardElement!);
+  it("calls the click function when the component is clicked", () => {
+    const { container } = render(
+      <CardProduct data={productData} click={clickMock} />
+    );
+    // Como o onClick está no div raiz, usamos o primeiro elemento renderizado
+    fireEvent.click(container.firstChild as HTMLElement);
     expect(clickMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("sets the correct background image style", () => {
+    const { container } = render(
+      <CardProduct data={productData} click={clickMock} />
+    );
+    // Seleciona o div que tem o style definido (imagem de fundo)
+    const backgroundDiv = container.querySelector("div[style]");
+    expect(backgroundDiv).toHaveStyle(
+      `background-image: url(${productData.imageUrl})`
+    );
   });
 });

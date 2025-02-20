@@ -1,7 +1,6 @@
 "use client";
 import { CategoriesType, Product } from "@/types/productType";
 import ViewValueProduct from "../Stock/ViewValueProduct";
-import base64ToBlob from "../../../utils/convertImage";
 import { useSession } from "next-auth/react";
 import { useDeleteProduct } from "@/mutations/ProductMutations";
 import WindowConfirm from "./../WindowConfirm/WindowConfirm";
@@ -79,7 +78,7 @@ const CardProductListAdmin = ({ data, sendOpenEditWindow, refetch }: Props) => {
           style={{
             backgroundImage: `url(${
               data.photo
-                ? base64ToBlob(data.photo)
+                ? `data:image/png;base64,${data.photo}`
                 : "https://placehold.co/600x400"
             })`,
             backgroundSize: "contain",

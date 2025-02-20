@@ -50,7 +50,7 @@ describe("getProducts", () => {
 
     // Como currentPage é 2, a função subtrai 1: página = 1; e adiciona &size=4&sort=name,desc e &categoryId=1
     expect(api.get).toHaveBeenCalledWith(
-      `/products?page=1&size=4&sort=name,desc&categoryId=1&productName=${
+      `/products?page=1&size=8&sort=name,desc&categoryId=1&productName=${
         searchName ? searchName : ""
       }`,
       {

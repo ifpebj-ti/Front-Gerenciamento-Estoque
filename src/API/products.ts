@@ -13,7 +13,7 @@ export const getProducts = async ({
     const response = await api.get(
       `/products?page=${
         currentPage ? currentPage - 1 : 0
-      }&size=4&sort=name,desc${
+      }&size=8&sort=name,desc${
         category ? `&categoryId=${category}` : ""
       }&productName=${searchName ? searchName : ""}`,
       {

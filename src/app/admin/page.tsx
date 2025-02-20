@@ -17,6 +17,7 @@ import WindowLoad from "../_components/WindowLoad/WindowLoad";
 import { Product } from "@/types/productType";
 import { useGetUsers } from "@/queries/UsersQueries";
 
+/* eslint-disable */
 const Admin = () => {
   const { data: session } = useSession();
   const [currentSession, setCurrentSession] = useState(0);
@@ -26,80 +27,82 @@ const Admin = () => {
   const [productSelectToEdit, setProdutSelectToEdit] = useState(0);
   const [userSelected, setUserSelected] = useState<UserInfoType | null>(null);
   const [searchByName, setSearchByName] = useState("");
+  const [showDefaultPass, setShowDefaultPass] = useState(false);
   const [filters, setFilters] = useState<{ category: number | null }>({
     category: null,
   });
   const [listUsers, setListUsers] = useState<UserInfoType[]>([]);
   const [listProducts, setListProducts] = useState<Product[]>([]);
-  const [currentPage, setCurrentPage] = useState(1); // Controle da página
+  const [currentPage, setCurrentPage] = useState(1);
+
   const products = useGetProducts({
     token: session?.accessToken as string,
-    currentPage: currentPage,
-    searchName: `${searchByName ? searchByName : ""}`,
+    currentPage,
+    searchName: searchByName || "",
     category: filters.category,
   });
+
   const users = useGetUsers(session?.accessToken as string);
   const [userAction, setUserAction] = useState<"add" | "edit">("add");
-  const [showDefaultPass, setShowDefaultPass] = useState(false);
-  // Resetar a página ao mudar os filtros
-  useEffect(() => {
-    setCurrentPage(1); // Voltar para a primeira página ao alterar os filtros
-    products.refetch(); // Refaz a requisição quando os filtros mudarem
-  }, [filters, products]);
 
+  // Resetar a página ao mudar os filtros e refazer a requisição
   useEffect(() => {
-    if (users.data) {
-      setListUsers(users.data);
-    }
-    return () => {};
-  }, [users]);
+    setCurrentPage(1);
+    products.refetch();
+  }, [filters]);
 
+  // Refazer a requisição sempre que a página for alterada
+  useEffect(() => {
+    products.refetch();
+  }, [currentPage]);
+
+  // Atualizar lista de produtos quando os dados forem carregados
   useEffect(() => {
     if (products.data) {
       setListProducts(products.data.content);
     }
-    return () => {};
   }, [products.data]);
+
+  // Atualizar lista de usuários quando os dados forem carregados
+  useEffect(() => {
+    if (users.data) {
+      setListUsers(users.data);
+    }
+  }, [users.data]);
+
   const renderSession = () => {
     switch (currentSession) {
       case 0:
         return (
           <>
             <button
-              onClick={() => {
-                setShowWindowAddProduct(!showWindowAddProduct);
-              }}
-              className="transition-all ease-in-out duration-200 shadow-lg hover:bg-[var(--color-primary)] hover:text-white hover:border-none w-full h-12 text-slate-400 rounded-lg  border-2 border-slate-400  uppercase 
-          "
+              onClick={() => setShowWindowAddProduct(!showWindowAddProduct)}
+              className="transition-all ease-in-out duration-200 shadow-lg hover:bg-[var(--color-primary)] hover:text-white hover:border-none w-full h-12 text-slate-400 rounded-lg border-2 border-slate-400 uppercase"
             >
               Adicionar Produto
             </button>
             {listProducts.length > 0 ? (
-              listProducts.map((product: Product) => {
-                return (
-                  <CardProductListAdmin
-                    refetch={products.refetch}
-                    key={product.id}
-                    sendOpenEditWindow={() => {
-                      setShowWindowAddProduct(false);
-                      setShowWindowEditProduct(!showWindowEditProduct);
-                      setProdutSelectToEdit(product.id);
-                    }}
-                    data={product}
-                  ></CardProductListAdmin>
-                );
-              })
+              listProducts.map((product: Product) => (
+                <CardProductListAdmin
+                  refetch={products.refetch}
+                  key={product.id}
+                  sendOpenEditWindow={() => {
+                    setShowWindowAddProduct(false);
+                    setShowWindowEditProduct(!showWindowEditProduct);
+                    setProdutSelectToEdit(product.id);
+                  }}
+                  data={product}
+                />
+              ))
             ) : (
               <div className="text-center mt-16 font-bold text-lg">
-                Não há produtos para mostrar
+                Não há produtos para mostrar
               </div>
             )}
             <Pagination
-              sendCurrentPage={(page: number) => {
-                setCurrentPage(page);
-              }}
-              totalPages={products.data?.totalPages as number}
-            ></Pagination>
+              sendCurrentPage={setCurrentPage}
+              totalPages={products.data?.totalPages || 1}
+            />
           </>
         );
       case 1:
@@ -110,12 +113,11 @@ const Admin = () => {
                 setUserAction("add");
                 setShowWindowAddNewUser(!showWindowAddNewUser);
               }}
-              className="transition-all ease-in-out duration-200 shadow-lg hover:bg-[var(--color-primary)] hover:text-white hover:border-none w-full h-12 text-slate-400 rounded-lg  border-2 border-slate-400  uppercase 
-          "
+              className="transition-all ease-in-out duration-200 shadow-lg hover:bg-[var(--color-primary)] hover:text-white hover:border-none w-full h-12 text-slate-400 rounded-lg border-2 border-slate-400 uppercase"
             >
               Adicionar Usuário
             </button>
-            <div className=" w-full flex justify-end  my-4 items-center relative">
+            <div className="flex w-full justify-end relative my-4">
               <div
                 onClick={() => {
                   setShowDefaultPass(!showDefaultPass);
@@ -148,114 +150,96 @@ const Admin = () => {
                 </span>
               </div>
               {showDefaultPass && (
-                <div className=" absolute rounded-md max-w-56 text-center p-2 bg-black/70 text-white top-9 right-0  shadow-md">
+                <div className=" absolute rounded-md max-w-56 text-center p-2 bg-black/70 text-white -bottom-[4.5rem] right-0  shadow-md">
                   A senha padrão para novos usuários é:{" "}
                   <strong>T2b95*R8</strong>
                 </div>
               )}
             </div>
+
             {listUsers.length > 0 ? (
-              listUsers.map((user: UserInfoType) => {
-                return (
-                  <CardUserListAdmin
-                    isRefetch={() => {
-                      users.refetch();
-                      renderSession();
-                    }}
-                    data={user}
-                    key={user.id}
-                    sendOpenEditWindow={() => {
-                      setShowWindowAddNewUser(true);
-                      setUserSelected(user);
-                      setUserAction("edit");
-                    }}
-                  ></CardUserListAdmin>
-                );
-              })
+              listUsers.map((user: UserInfoType) => (
+                <CardUserListAdmin
+                  isRefetch={() => {
+                    users.refetch();
+                  }}
+                  data={user}
+                  key={user.id}
+                  sendOpenEditWindow={() => {
+                    setShowWindowAddNewUser(true);
+                    setUserSelected(user);
+                    setUserAction("edit");
+                  }}
+                />
+              ))
             ) : (
               <div className="text-center mt-16 font-bold text-lg">
-                Não há usuários cadastrados
+                Não há usuários cadastrados
               </div>
             )}
           </>
         );
 
       default:
-        break;
+        return null;
     }
   };
+
   return (
     <>
-      {products.isLoading && <WindowLoad></WindowLoad>}
+      {products.isLoading && <WindowLoad />}
+
+      {showWindowAddProduct && (
+        <>
+          <div className="bg-black/75 fixed top-0 right-0 w-full h-full z-50"></div>
+          <div className="absolute z-[51] w-full p-8">
+            <WindowAddProduct
+              refetchProducts={products.refetch}
+              sendClose={() => setShowWindowAddProduct(false)}
+            />
+          </div>
+        </>
+      )}
+
+      {showWindowEditProduct && (
+        <>
+          <div className="bg-black/75 fixed top-0 right-0 w-full h-full z-50"></div>
+          <div className="absolute z-[51] w-full p-8">
+            <WindowEditProduct
+              refetchProducts={products.refetch}
+              id={productSelectToEdit}
+              sendClose={() => setShowWindowEditProduct(false)}
+            />
+          </div>
+        </>
+      )}
+
       {showWindowAddNewUser && (
         <>
-          <div className="w-full  min-h-screen  bg-black/75 flex justify-center items-center fixed z-40 px-8"></div>
-          <div className="absolute z-40 w-full flex justify-center items-center p-8">
+          <div className="bg-black/75 fixed top-0 right-0 w-full h-full z-50"></div>
+          <div className="absolute z-[51] w-full p-8">
             <WindowAddNewUser
-              isRefetch={() => {
-                users.refetch();
-                renderSession();
-              }}
-              isAddUser={userAction === "add" ? true : false}
+              isRefetch={users.refetch}
+              isAddUser={userAction === "add"}
               data={userSelected}
               sendClose={() => {
-                setShowWindowAddNewUser(!showWindowAddNewUser);
+                setShowWindowAddNewUser(false);
                 setUserSelected(null);
               }}
             />
           </div>
         </>
       )}
-      {showWindowAddProduct ? (
-        <>
-          <div className="w-full  min-h-screen  bg-black/75 flex justify-center items-center fixed z-40 px-8"></div>
-          <div className="absolute z-40 w-full flex justify-center items-center p-8">
-            <WindowAddProduct
-              refetchProducts={() => {
-                products.refetch();
-                renderSession();
-              }}
-              sendClose={() => {
-                setShowWindowAddProduct(!showWindowAddProduct);
-              }}
-            ></WindowAddProduct>
-          </div>
-        </>
-      ) : null}
-      {showWindowEditProduct ? (
-        <>
-          <div className="w-full  min-h-screen  bg-black/75 flex justify-center items-center fixed z-40 px-8"></div>
-          <div className="absolute z-40 w-full flex justify-center items-center p-8">
-            <WindowEditProduct
-              refetchProducts={() => {
-                products.refetch();
-                renderSession();
-              }}
-              id={productSelectToEdit}
-              sendClose={() => {
-                setShowWindowEditProduct(!showWindowEditProduct);
-              }}
-            ></WindowEditProduct>
-          </div>
-        </>
-      ) : null}
-      <Header></Header>
-      <main className="max-w-[1100px] gap-8  w-full px-8 flex flex-col justify-center items-center mx-auto mt-8 mb-20">
-        <SelectSession
-          sendOption={(option: number) => {
-            setCurrentSession(option);
-          }}
-          options={OPTIONS}
-        ></SelectSession>
+
+      <Header />
+      <main className="max-w-[1100px] gap-8 w-full px-8 flex flex-col justify-center items-center mx-auto mt-8 mb-20">
+        <SelectSession sendOption={setCurrentSession} options={OPTIONS} />
+
         {currentSession === 0 && (
           <FilterProducts
-            sendCategory={(category: number | null) => {
-              setFilters({ category: category });
-            }}
-            sendName={(name: string) => {
-              setSearchByName(name);
-            }}
-          ></FilterProducts>
+            sendCategory={(category) => setFilters({ category })}
+            sendName={setSearchByName}
+          />
         )}
 
         <section className="flex flex-col gap-2 mt-4 relative">

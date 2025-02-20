@@ -143,7 +143,7 @@ const CardUserListAdmin = ({ data, sendOpenEditWindow, isRefetch }: Props) => {
             {data.name}
           </span>
           <span className="inline-flex flex-wrap justify-center sm:justify-stretch gap-4 mx-auto lg:mx-0">
-            <span className="text-sm font-bold uppercase text-center lg:text-start">
+            <span className="text-sm font-bold sss text-center lg:text-start">
               <p className="text-slate-500 lowercase first-letter:uppercase">
                 Email:
               </p>
